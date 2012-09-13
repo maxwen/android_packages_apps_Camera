@@ -528,6 +528,12 @@ public class CameraSettings {
         if (CamcorderProfile.hasProfile(mCameraId, CamcorderProfile.QUALITY_480P)) {
             supported.add(Integer.toString(CamcorderProfile.QUALITY_480P));
         }
+        if (CamcorderProfile.hasProfile(mCameraId, CamcorderProfile.QUALITY_VGA)) {
+            supported.add(Integer.toString(CamcorderProfile.QUALITY_VGA));
+        }
+        if (CamcorderProfile.hasProfile(mCameraId, CamcorderProfile.QUALITY_QVGA)) {
+            supported.add(Integer.toString(CamcorderProfile.QUALITY_QVGA));
+        }
 
         return supported;
     }
