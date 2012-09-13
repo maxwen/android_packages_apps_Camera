@@ -83,9 +83,10 @@ public class MenuHelper {
         intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
         intent.setClassName(activity.getPackageName(), className);
 
+        // maxwen camere must be fully release on mode switching
         // Keep the camera instance for a while.
         // This avoids re-opening the camera and saves time.
-        CameraHolder.instance().keep();
+        //CameraHolder.instance().keep();
 
         try {
             activity.startActivity(intent);
