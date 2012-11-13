@@ -48,7 +48,7 @@ public class MenuHelper {
 
         // Keep the camera instance for a while.
         // This avoids re-opening the camera and saves time.
-        CameraHolder.instance().keep();
+        //CameraHolder.instance().keep();
 
         try {
             activity.startActivity(intent);
