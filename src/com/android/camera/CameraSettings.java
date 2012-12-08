@@ -554,6 +554,7 @@ public class CameraSettings {
         }
         if (Util.useHTCCamMode()) {
             params.set("cam-mode", on ? "1" : "0");
+            params.set("capture-mode", "normal");
         }
     }
 
