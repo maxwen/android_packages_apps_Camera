@@ -594,7 +594,7 @@ public class VideoCamera extends ActivityBase
             }
         } else if (!recordFail){
             // Start capture animation.
-            if (!mPaused) mCameraScreenNail.animateCapture(getCameraRotation());
+            //if (!mPaused) mCameraScreenNail.animateCapture(getCameraRotation());
             if (!effectsActive()) getThumbnail();
         }
     }

@@ -970,7 +970,7 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
                 String title = mImageNamer.getTitle();
                 mImageSaver.addImage(jpegData, uri, title, mLocation,
                         width, height, mThumbnailViewWidth, orientation);
-                mCameraScreenNail.animateCapture(getCameraRotation());
+                //mCameraScreenNail.animateCapture(getCameraRotation());
             } else {
                 mJpegImageData = jpegData;
                 if (!mQuickCapture) {
