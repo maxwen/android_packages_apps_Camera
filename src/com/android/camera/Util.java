@@ -138,6 +138,7 @@ public class Util {
 
     // HTC camcorder mode
     private static boolean sHTCCamMode;
+    private static boolean sNoFaceDetect;
 
     // For setting video size before recording starts
     private static boolean sEarlyVideoSize;
@@ -167,6 +168,8 @@ public class Util {
         sEnableZSL = context.getResources().getBoolean(R.bool.enableZSL);
         sNoFaceDetectOnFrontCamera = context.getResources().getBoolean(
                 R.bool.noFaceDetectOnFrontCamera);
+        sNoFaceDetect = context.getResources().getBoolean(
+                R.bool.config_noFaceDetect);
     }
 
     public static int dpToPixel(int dp) {
@@ -175,6 +178,10 @@ public class Util {
 
     public static boolean useHTCCamMode() {
         return sHTCCamMode;
+    }
+
+    public static boolean noFaceDetect() {
+        return sNoFaceDetect;
     }
 
     public static boolean useSamsungCamMode() {

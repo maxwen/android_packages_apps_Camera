@@ -734,6 +734,13 @@ public class PhotoModule
         }
 
         if (mFaceDetectionStarted || mCameraState != IDLE) return;
+
+        // Workaround for face detection on rearcamera (disable it)
+        if (Util.noFaceDetect()) {
+            Log.i(TAG, "Face detection disabled");
+            return;
+        }
+
         if (mParameters.getMaxNumDetectedFaces() > 0) {
             mFaceDetectionStarted = true;
             mFaceView.clear();
