@@ -258,7 +258,7 @@ public class CameraHolder {
 
         if (mCameraDevice == null) return;
 
-        long now = System.currentTimeMillis();
+        /*long now = System.currentTimeMillis();
         if (now < mKeepBeforeTime) {
             if (mCameraOpened) {
                 mCameraOpened = false;
@@ -267,7 +267,7 @@ public class CameraHolder {
             mHandler.sendEmptyMessageDelayed(RELEASE_CAMERA,
                     mKeepBeforeTime - now);
             return;
-        }
+        }*/
         mCameraOpened = false;
         mCameraDevice.release();
         mCameraDevice = null;
