@@ -135,8 +135,11 @@
     <!-- Settings screen, Focus mode dialog radio button choices -->
     <string name="pref_camera_focusmode_entry_auto">Auto</string>
     <string name="pref_camera_focusmode_entry_infinity">Infinity</string>
+    <string name="pref_camera_focusmode_entry_hyperfocal">Hyperfocal</string>
     <string name="pref_camera_focusmode_entry_macro">Macro</string>
-
+    <string name="pref_camera_focusmode_entry_fixed">Fixed</string>
+    <string name="pref_camera_focusmode_entry_continuous">Continuous</string>
+    
     <!-- Default flash mode setting.-->
     <string name="pref_camera_flashmode_default" translatable="false">auto</string>
 
@@ -173,18 +176,31 @@
     <!-- Settings screen, Select Scene mode -->
     <string name="pref_camera_scenemode_title">Scene mode</string>
 
-    <!-- Settings menu, scene mode choices [CHAR LIMIT=16] -->
-    <string name="pref_camera_scenemode_entry_auto">Auto</string>
-    <!-- Scene mode that uses HDR (high dynamic range) [CHAR LIMIT=16] -->
-    <string name="pref_camera_scenemode_entry_hdr">HDR</string>
-    <!-- Scene mode that takes an image quickly with little motion blur. [CHAR LIMIT=16] -->
-    <string name="pref_camera_scenemode_entry_action">Action</string>
-    <!-- Scene mode that takes long exposures to capture night scenes without flash. [CHAR LIMIT=16] -->
-    <string name="pref_camera_scenemode_entry_night">Night</string>
-    <!-- Scene mode optimized for taking images in the sunset. [CHAR LIMIT=16] -->
-    <string name="pref_camera_scenemode_entry_sunset">Sunset</string>
-    <!-- Scene mode optimized for taking indoor low-lights pictures. [CHAR LIMIT=16] -->
-    <string name="pref_camera_scenemode_entry_party">Party</string>
+    <!-- Settings menu, scene mode choices [CHAR LIMIT=16] -->    
+        <string name="pref_camera_scenemode_entry_auto">Auto</string>
+        <string name="pref_camera_scenemode_entry_action">Action</string>
+        <string name="pref_camera_scenemode_entry_portrait">Portrait</string>
+        <string name="pref_camera_scenemode_entry_landscape">Landscape</string>
+        <string name="pref_camera_scenemode_entry_beach">Beach</string>
+		<string name="pref_camera_scenemode_entry_fireworks">Fireworks</string>
+        <string name="pref_camera_scenemode_entry_night">Night</string>
+        <string name="pref_camera_scenemode_entry_nightportrait">Night Portrait</string>
+        <string name="pref_camera_scenemode_entry_snow">Snow</string>
+        <string name="pref_camera_scenemode_entry_sports">Sports</string>
+        <string name="pref_camera_scenemode_entry_steadyphoto">Steadyphoto</string>
+        <string name="pref_camera_scenemode_entry_sunset">Sunset</string>
+        <string name="pref_camera_scenemode_entry_theatre">Theatre</string>
+        <string name="pref_camera_scenemode_entry_barcode">Barcode</string>
+        <string name="pref_camera_scenemode_entry_candlelight">Candlelight</string>
+        <string name="pref_camera_scenemode_entry_beautymode">Beauty Mode</string>
+        <string name="pref_camera_scenemode_entry_backgroundblur">Background Blur</string>
+        <string name="pref_camera_scenemode_entry_backlighthdr">Backlight HDR</string>
+        <string name="pref_camera_scenemode_entry_closeup">Close Up</string>
+        <string name="pref_camera_scenemode_entry_whiteboard">White Board</string>
+        <string name="pref_camera_scenemode_entry_flowers">Flowers</string>
+        <string name="pref_camera_scenemode_entry_backlight">Backlight</string>
+        <string name="pref_camera_scenemode_entry_backlightportrait">Backlight Portrait</string>
+        <string name="pref_camera_scenemode_entry_text">"Text</string>
 
     <!-- Toast after trying to select a setting that is not allowed to change in scene mode [CHAR LIMIT=NONE] -->
     <string name="not_selectable_in_scene_mode">Not selectable in scene mode.</string>

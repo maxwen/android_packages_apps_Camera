@@ -186,13 +186,19 @@
     <string-array name="pref_camera_focusmode_entries" translatable="false">
         <item>@string/pref_camera_focusmode_entry_auto</item>
         <item>@string/pref_camera_focusmode_entry_infinity</item>
+        <item>@string/pref_camera_focusmode_entry_hyperfocal</item>
         <item>@string/pref_camera_focusmode_entry_macro</item>
+        <item>@string/pref_camera_focusmode_entry_fixed</item>
+        <item>@string/pref_camera_focusmode_entry_continuous</item>
     </string-array>
 
     <string-array name="pref_camera_focusmode_entryvalues" translatable="false">
         <item>auto</item>
         <item>infinity</item>
+        <item>hyperfocal</item>
         <item>macro</item>
+        <item>fixed</item>
+        <item>continuous-picture</item>
     </string-array>
 
     <!-- Camera Preferences flash mode dialog box entries -->
@@ -262,6 +268,7 @@
     </array>
 
     <!-- Camera Preferences White Balance dialog box entries -->
+    <!--whitebalance-values=auto,incandescent,fluorescent,warm-fluorescent,daylight,cloudy-daylight,shade,twilight-->
     <string-array name="pref_camera_whitebalance_entries" translatable="false">
         <item>@string/pref_camera_whitebalance_entry_incandescent</item>
         <item>@string/pref_camera_whitebalance_entry_fluorescent</item>
@@ -295,20 +302,62 @@
     </array>
 
     <!-- Camera Preferences Scene Mode dialog box entries -->
+    <!-- auto,action,portrait,landscape,beach,fireworks,night,night-portrait,snow,sports,steadyphoto,sunset,theatre,barcode,candlelight,beauty-mode,background-blur,backlight-hdr,close-up,white-board,flowers,backlight,backlight_portrait,text
+-->
     <string-array name="pref_camera_scenemode_entries" translatable="false">
         <item>@string/pref_camera_scenemode_entry_auto</item>
         <item>@string/pref_camera_scenemode_entry_action</item>
+        <item>@string/pref_camera_scenemode_entry_portrait</item>
+        <item>@string/pref_camera_scenemode_entry_landscape</item>
+        <item>@string/pref_camera_scenemode_entry_beach</item>
+		<item>@string/pref_camera_scenemode_entry_fireworks</item>
         <item>@string/pref_camera_scenemode_entry_night</item>
+        <item>@string/pref_camera_scenemode_entry_nightportrait</item>
+        <item>@string/pref_camera_scenemode_entry_snow</item>
+        <item>@string/pref_camera_scenemode_entry_sports</item>
+        <item>@string/pref_camera_scenemode_entry_steadyphoto</item>
         <item>@string/pref_camera_scenemode_entry_sunset</item>
-        <item>@string/pref_camera_scenemode_entry_party</item>
+        <item>@string/pref_camera_scenemode_entry_theatre</item>
+        <item>@string/pref_camera_scenemode_entry_barcode</item>
+        <item>@string/pref_camera_scenemode_entry_candlelight</item>
+        <item>@string/pref_camera_scenemode_entry_beautymode</item>
+        <item>@string/pref_camera_scenemode_entry_backgroundblur</item>
+        <item>@string/pref_camera_scenemode_entry_backlighthdr</item>
+        <item>@string/pref_camera_scenemode_entry_closeup</item>
+        <item>@string/pref_camera_scenemode_entry_whiteboard</item>
+        <item>@string/pref_camera_scenemode_entry_flowers</item>
+        <item>@string/pref_camera_scenemode_entry_backlight</item>
+        <item>@string/pref_camera_scenemode_entry_backlightportrait</item>
+        <item>@string/pref_camera_scenemode_entry_text</item>
+        
     </string-array>
 
     <string-array name="pref_camera_scenemode_entryvalues" translatable="false">
         <item>auto</item>
         <item>action</item>
+        <item>portrait</item>
+        <item>landscape</item>
+        <item>beach</item>
+		<item>fireworks</item>
         <item>night</item>
+        <item>night-portrait</item>
+        <item>snow</item>
+        <item>sports</item>
+        <item>steadyphoto</item>
         <item>sunset</item>
-        <item>party</item>
+        <item>theatre</item>
+        <item>barcode</item>
+        <item>candlelight</item>
+        <item>beauty-mode</item>
+        <item>background-blur</item>
+        <item>backlight-hdr</item>
+        <item>close-up</item>
+        <item>white-board</item>
+        <item>flowers</item>
+        <item>backlight</item>
+        <item>backlight_portrait</item>
+        <item>text</item>
+
     </string-array>
 
     <array name="camera_id_entries" translatable="false">

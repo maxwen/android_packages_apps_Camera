@@ -113,7 +113,13 @@ public class ListPreference extends CameraPreference {
     }
 
     public void setValue(String value) {
-        if (findIndexOfValue(value) < 0) throw new IllegalArgumentException();
+        if (findIndexOfValue(value) < 0) {
+        	for(int i=0; i<mEntryValues.length; i++)
+           		Log.d(TAG, "maxwen: values="+mEntryValues[i]);        		
+           	Log.e(TAG, "maxwen: value="+value);
+           	return;
+        	//throw new IllegalArgumentException();
+       	}
         mValue = value;
         persistStringValue(value);
     }
