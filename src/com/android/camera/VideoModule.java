@@ -1942,8 +1942,8 @@ public class VideoModule implements CameraModule,
         CameraSettings.setEarlyVideoSize(mParameters, mProfile);
 
         // Set flash mode.
-        String flashMode;
-        if (mActivity.mShowCameraAppView) {
+        String flashMode = Parameters.FLASH_MODE_OFF;
+        /*if (mActivity.mShowCameraAppView) {
             flashMode = mPreferences.getString(
                     CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE,
                     mActivity.getString(R.string.pref_camera_video_flashmode_default));
@@ -1959,7 +1959,7 @@ public class VideoModule implements CameraModule,
                 flashMode = mActivity.getString(
                         R.string.pref_camera_flashmode_no_flash);
             }
-        }
+        }*/
 
         // Set white balance parameter.
         String whiteBalance = mPreferences.getString(

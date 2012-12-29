@@ -256,21 +256,34 @@ public class CameraSettings {
             return;
         }
         float step = mParameters.getExposureCompensationStep();
-
+        if(step <1.0f){
+        	step=2.0f;
+        }
+        if(max>10){
+        	max=10;
+        }
+        if(min<-10){
+        	min=-10;
+        }
         // show only integer values for exposure compensation
-        int maxValue = (int) FloatMath.floor(max * step);
-        int minValue = (int) FloatMath.ceil(min * step);
-        CharSequence entries[] = new CharSequence[maxValue - minValue + 1];
-        CharSequence entryValues[] = new CharSequence[maxValue - minValue + 1];
-        int[] icons = new int[maxValue - minValue + 1];
+        int maxValue = (int) max;
+        int minValue = (int) min;
+        CharSequence entries[] = new CharSequence[maxValue + 1];
+        CharSequence entryValues[] = new CharSequence[maxValue + 1];
+        int[] icons = new int[maxValue + 1];
         TypedArray iconIds = mContext.getResources().obtainTypedArray(
                 R.array.pref_camera_exposure_icons);
-        for (int i = minValue; i <= maxValue; ++i) {
-            entryValues[maxValue - i] = Integer.toString(Math.round(i / step));
+                
+        int j=-5;
+        int index=0;
+        for (int i = minValue; i <= maxValue; i=i+(int)step) {
+            entryValues[index] = Integer.toString(i);
             StringBuilder builder = new StringBuilder();
             if (i > 0) builder.append('+');
-            entries[maxValue - i] = builder.append(i).toString();
-            icons[maxValue - i] = iconIds.getResourceId(5 + i, 0);
+            entries[index] = builder.append(i).toString();
+            icons[index] = iconIds.getResourceId(5 + j, 0);
+            j++;
+            index++;
         }
         exposure.setUseSingleIcon(true);
         exposure.setEntries(entries);

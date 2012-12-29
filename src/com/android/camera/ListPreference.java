@@ -136,6 +136,13 @@ public class ListPreference extends CameraPreference {
     }
 
     public String getEntry() {
+    	int idx=findIndexOfValue(getValue());
+    	if(idx==-1){
+    		// Avoid the crash
+            Log.e(TAG, "Fail to find value=" + getValue());
+            print();
+            return null;
+    	}
         return mEntries[findIndexOfValue(getValue())].toString();
     }
 

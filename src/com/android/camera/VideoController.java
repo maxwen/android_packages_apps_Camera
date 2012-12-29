@@ -56,7 +56,7 @@ public class VideoController extends PieController
         mPopupStatus = POPUP_NONE;
         float sweep = FLOAT_PI_DIVIDED_BY_TWO / 2;
 
-        addItem(CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE, FLOAT_PI_DIVIDED_BY_TWO - sweep, sweep);
+        //addItem(CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE, FLOAT_PI_DIVIDED_BY_TWO - sweep, sweep);
         addItem(CameraSettings.KEY_WHITE_BALANCE, 3 * FLOAT_PI_DIVIDED_BY_TWO + sweep, sweep);
         PieItem item = makeItem(R.drawable.ic_switch_video_facing_holo_light);
         item.setFixedSlice(FLOAT_PI_DIVIDED_BY_TWO + sweep,  sweep);
@@ -82,7 +82,9 @@ public class VideoController extends PieController
                 CameraSettings.KEY_VIDEO_QUALITY,
                 CameraSettings.KEY_RECORD_LOCATION,
                 CameraSettings.KEY_POWER_SHUTTER,
-                CameraSettings.KEY_COLOR_EFFECT};
+                CameraSettings.KEY_COLOR_EFFECT,
+                //CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE,
+                CameraSettings.KEY_WHITE_BALANCE};
 
         item = makeItem(R.drawable.ic_settings_holo_light);
         item.setFixedSlice(FLOAT_PI_DIVIDED_BY_TWO * 3, sweep);

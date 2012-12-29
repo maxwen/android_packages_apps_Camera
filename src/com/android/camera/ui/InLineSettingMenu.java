@@ -50,7 +50,10 @@ public class InLineSettingMenu extends InLineSettingItem {
     @Override
     protected void updateView() {
         if (mOverrideValue == null) {
-            mEntry.setText(mPreference.getEntry());
+        	String text=mPreference.getEntry();
+        	if(text!=null){
+            	mEntry.setText(text);
+           	}
         } else {
             int index = mPreference.findIndexOfValue(mOverrideValue);
             if (index != -1) {
