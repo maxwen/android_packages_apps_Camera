@@ -599,6 +599,8 @@ public class CameraSettings {
         }
         if (Util.useHTCCamMode()) {
             params.set("cam-mode", on ? "1" : "0");
+            // capture-mode-supported=normal,contiburst,zsl,hdr,panorama,groupportrait
+            params.set("capture-mode", "normal");
         }
     }
 
