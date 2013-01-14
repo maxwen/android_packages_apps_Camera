@@ -808,43 +808,29 @@ public class PhotoModule
         }
         int id = 0;
         switch(value) {
-        case -10:
-            id = R.drawable.ic_indicator_ev_n5;
-            break;
-        case -8:
-            id = R.drawable.ic_indicator_ev_n4;
-            break;
-        case -6:
-            id = R.drawable.ic_indicator_ev_n3;
-            break;
-        case -4:
-            id = R.drawable.ic_indicator_ev_n2;
-            break;
-        case -2:
-            id = R.drawable.ic_indicator_ev_n1;
-            break;
-        case 0:
-            id = R.drawable.ic_indicator_ev_0;
-            break;
-        case 2:
-            id = R.drawable.ic_indicator_ev_p1;
-            break;
-        case 4:
-            id = R.drawable.ic_indicator_ev_p2;
-            break;
-        case 6:
-            id = R.drawable.ic_indicator_ev_p3;
-            break;
-        case 8:
-            id = R.drawable.ic_indicator_ev_p4;
-            break;
-        case 10:
-            id = R.drawable.ic_indicator_ev_p5;
-            break;
-
+        	case -12:
+            	id = R.drawable.ic_indicator_ev_n3;
+            	break;
+        	case -8:
+            	id = R.drawable.ic_indicator_ev_n2;
+            	break;
+        	case -4:
+            	id = R.drawable.ic_indicator_ev_n1;
+            	break;
+        	case 0:
+            	id = R.drawable.ic_indicator_ev_0;
+            	break;
+        	case 4:
+            	id = R.drawable.ic_indicator_ev_p1;
+            	break;
+        	case 8:
+            	id = R.drawable.ic_indicator_ev_p2;
+            	break;
+        	case 12:
+            	id = R.drawable.ic_indicator_ev_p3;
+            	break;
         }
         mExposureIndicator.setImageResource(id);
-
     }
 
     private void updateFlashOnScreenIndicator(String value) {
