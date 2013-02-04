@@ -68,7 +68,8 @@ public class CameraSettings {
     public static final String KEY_JPEG = "pref_camera_jpeg_key";
     public static final String KEY_COLOR_EFFECT = "pref_camera_coloreffect_key";
     public static final String KEY_BURST_MODE = "pref_camera_burst_key";
-
+    public static final String KEY_TIMER_MODE = "pref_camera_timer_key";
+    
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String VALUE_ON = "on";
     public static final String VALUE_OFF = "off";
