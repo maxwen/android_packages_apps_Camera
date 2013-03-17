@@ -55,6 +55,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -68,6 +69,7 @@ import com.android.camera.ui.PopupManager;
 import com.android.camera.ui.PreviewSurfaceView;
 import com.android.camera.ui.RenderOverlay;
 import com.android.camera.ui.Rotatable;
+import com.android.camera.ui.RotateLayout;
 import com.android.camera.ui.RotateTextToast;
 import com.android.camera.ui.TwoStateImageView;
 import com.android.camera.ui.ZoomRenderer;
@@ -302,7 +304,10 @@ public class PhotoModule
 
     // Camera timer.
     private boolean mTimerMode = false;
-	private int mCaptureMode = 0;
+	private int mTimerValue = 0;
+	private boolean mTimerRunning = false;
+    private TextView mTimerModeTimeView;
+    private RotateLayout mTimerModeTimeRect;
 		
     private boolean mQuickCapture;
 
@@ -810,6 +815,8 @@ public class PhotoModule
         mFlashIndicator = (ImageView) mOnScreenIndicators.findViewById(R.id.menu_flash_indicator);
         mSceneIndicator = (ImageView) mOnScreenIndicators.findViewById(R.id.menu_scenemode_indicator);
         mHdrIndicator = (ImageView) mOnScreenIndicators.findViewById(R.id.menu_hdr_indicator);
+        mTimerModeTimeView = (TextView) mRootView.findViewById(R.id.timer_mode_time);
+        mTimerModeTimeRect = (RotateLayout) mRootView.findViewById(R.id.timer_mode_rect);
     }
 
     @Override
@@ -1624,10 +1631,10 @@ public class PhotoModule
 
     @Override
     public void onShutterButtonFocus(boolean pressed) {
-		mCaptureMode = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_TIMER_MODE, "0"));
+		mTimerValue = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_TIMER_MODE, "0"));
 
         if (!mTimerMode) {
-            if (mCaptureMode != 0) {
+            if (mTimerValue != 0) {
                 mTimerMode = true;
             }
         }
@@ -1654,7 +1661,7 @@ public class PhotoModule
 
     @Override
     public void onShutterButtonClick() {
-        if (mPaused || collapseCameraControls()
+        if (mTimerRunning || mPaused || collapseCameraControls()
                 || (mCameraState == SWITCHING_CAMERA)
                 || (mCameraState == PREVIEW_STOPPED)) return;
 
@@ -1668,7 +1675,10 @@ public class PhotoModule
         Log.d(TAG, "onShutterButtonClick: mCameraState=" + mCameraState);
 
         if (mTimerMode) {
-            updateTimer(mCaptureMode);
+            mTimerModeTimeView.setText(secondToTimeString(mTimerValue));
+        	mTimerModeTimeView.setVisibility(View.VISIBLE);
+			mTimerRunning = true;
+            updateTimer(mTimerValue);
             return;
         }
 
@@ -1822,6 +1832,7 @@ public class PhotoModule
         mHandler.removeMessages(START_PREVIEW_DONE);
         mHandler.removeMessages(OPEN_CAMERA_FAIL);
         mHandler.removeMessages(CAMERA_DISABLED);
+        stopTimer();
 
         mPendingSwitchCameraId = -1;
         if (mFocusManager != null) mFocusManager.removeMessages();
@@ -2590,6 +2601,7 @@ public class PhotoModule
         mPhotoControl.setCameraId(mCameraId);
 
         // from onPause
+        stopTimer();
         closeCamera();
         collapseCameraControls();
         if (mFaceView != null) mFaceView.clear();
@@ -2765,13 +2777,41 @@ public class PhotoModule
         if (timerSeconds < 0) {
             mFocusManager.onShutterDown();
             mFocusManager.doSnap();
-            mTimerMode = false;
-            mHandler.removeMessages(CAMERA_TIMER);
+            stopTimer();
         } else {
+        	// else it will be hidden on rotate during timer
+        	mTimerModeTimeView.setVisibility(View.VISIBLE);
+        	mTimerModeTimeView.setText(secondToTimeString(timerSeconds));
             Message timerMsg = Message.obtain();
             timerMsg.arg1 = timerSeconds;
             timerMsg.what = CAMERA_TIMER;
             mHandler.sendMessageDelayed(timerMsg, 1000);
         }
+    }
+    
+    private void stopTimer() {
+    	mTimerMode = false;
+        mTimerRunning = false;
+        mTimerModeTimeView.setVisibility(View.GONE);
+        mHandler.removeMessages(CAMERA_TIMER);
+    }
+    
+    private String secondToTimeString(long seconds) {
+        long minutes = seconds / 60;
+        long remainderSeconds = seconds - (minutes * 60);
+
+        StringBuilder timeStringBuilder = new StringBuilder();
+
+        // Minutes
+        timeStringBuilder.append(minutes);
+        timeStringBuilder.append(':');
+
+        // Seconds
+        if (remainderSeconds < 10) {
+            timeStringBuilder.append('0');
+        }
+        timeStringBuilder.append(remainderSeconds);
+
+        return timeStringBuilder.toString();
     }
 }
