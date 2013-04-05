@@ -2056,6 +2056,8 @@ public class VideoModule implements CameraModule,
     private void updateCameraScreenNailSize(int width, int height) {
         if (!ApiHelper.HAS_SURFACE_TEXTURE) return;
 
+		Log.v(TAG, "updateCameraScreenNailSize preview size "+width+"x"+height);
+		
         if (mCameraDisplayOrientation % 180 != 0) {
             int tmp = width;
             width = height;
@@ -2063,14 +2065,10 @@ public class VideoModule implements CameraModule,
         }
 
         CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
-        int oldWidth = screenNail.getWidth();
-        int oldHeight = screenNail.getHeight();
 
-        if (oldWidth != width || oldHeight != height) {
-            screenNail.setSize(width, height);
-            screenNail.enableAspectRatioClamping();
-            mActivity.notifyScreenNailChanged();
-        }
+        screenNail.setSize(width, height);
+        screenNail.enableAspectRatioClamping();
+        mActivity.notifyScreenNailChanged();
 
         if (screenNail.getSurfaceTexture() == null) {
             screenNail.acquireSurfaceTexture();
