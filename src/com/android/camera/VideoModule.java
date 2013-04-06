@@ -1944,7 +1944,18 @@ public class VideoModule implements CameraModule,
 
     @SuppressWarnings("deprecation")
     private void setCameraParameters() {
-        mParameters.setPreviewSize(mDesiredPreviewWidth, mDesiredPreviewHeight);
+        Size originalPreview = mParameters.getPreviewSize();
+        if (originalPreview.width != mDesiredPreviewWidth || originalPreview.height != mDesiredPreviewHeight) {
+        	mParameters.setPreviewSize(mDesiredPreviewWidth, mDesiredPreviewHeight);
+
+            // Zoom related settings will be changed for different preview
+            // sizes, so set and read the parameters to get latest values
+            mActivity.mCameraDevice.setParameters(mParameters);
+            mParameters = mActivity.mCameraDevice.getParameters();
+        }
+
+        Log.v(TAG, "Preview size is " + mDesiredPreviewWidth + "x" + mDesiredPreviewHeight);
+
         mParameters.setPreviewFrameRate(mProfile.videoFrameRate);
 
         // Set video mode
