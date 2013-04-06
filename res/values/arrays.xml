@@ -20,6 +20,7 @@
     <string-array name="pref_video_quality_entries" translatable="false">
         <item>@string/pref_video_quality_entry_1080p</item>
         <item>@string/pref_video_quality_entry_720p</item>
+        <item>@string/pref_video_quality_entry_480p</item>
         <item>@string/pref_video_quality_entry_high</item>
         <item>@string/pref_video_quality_entry_low</item>
    </string-array>
@@ -29,6 +30,8 @@
         <item>6</item>
         <!-- The integer value of CamcorderProfile.QUALITY_720P -->
         <item>5</item>
+        <!-- The integer value of CamcorderProfile.QUALITY_480P -->
+        <item>4</item>
         <!-- The integer value of CamcorderProfile.QUALITY_HIGH -->
         <item>1</item>
          <!-- The integer value of CamcorderProfile.QUALITY_LOW -->
