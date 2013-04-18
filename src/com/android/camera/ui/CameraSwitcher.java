@@ -128,6 +128,8 @@ public class CameraSwitcher extends RotateImageView
             item.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    /* Once Photosphere is added to AOSP this will need
+                       to be adjusted to == 4 */
                     if (index == 3) {
                         closePopup();
                         Intent launchGallery = new Intent(Intent.makeMainSelectorActivity(

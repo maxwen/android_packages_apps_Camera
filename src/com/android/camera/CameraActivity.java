@@ -136,6 +136,7 @@ public class CameraActivity extends ActivityBase
         if (mPaused) return;
         if (i != mCurrentModuleIndex) {
             mPaused = true;
+
             CameraScreenNail screenNail = getCameraScreenNail();
             if (screenNail != null) {
                 if (mCameraSwitchAnimator != null && mCameraSwitchAnimator.isRunning()) {

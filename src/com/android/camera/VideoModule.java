@@ -427,6 +427,8 @@ public class VideoModule implements CameraModule,
         mPreferences.setLocalId(mActivity, mCameraId);
         CameraSettings.upgradeLocalPreferences(mPreferences.getLocal());
 
+        mActivity.setStoragePath(mPreferences);
+
         mActivity.mNumberOfCameras = CameraHolder.instance().getNumberOfCameras();
         mPrefVideoEffectDefault = mActivity.getString(R.string.pref_video_effect_default);
         resetEffect();
@@ -1446,7 +1448,7 @@ public class VideoModule implements CameraModule,
         // Used when emailing.
         String filename = title + convertOutputFormatToFileExt(outputFileFormat);
         String mime = convertOutputFormatToMimeType(outputFileFormat);
-        String path = Storage.DIRECTORY + '/' + filename;
+        String path = Storage.getStorage().generateDirectory() + '/' + filename;
         String tmpPath = path + ".tmp";
         mCurrentVideoValues = new ContentValues(7);
         mCurrentVideoValues.put(Video.Media.TITLE, title);
@@ -1595,7 +1597,6 @@ public class VideoModule implements CameraModule,
 
     private void startVideoRecording() {
         Log.v(TAG, "startVideoRecording");
-        
         mActivity.setSwipingEnabled(false);
 
         mActivity.updateStorageSpaceAndHint();
@@ -2059,6 +2060,7 @@ public class VideoModule implements CameraModule,
         }
 
         CameraSettings.dumpParameters(mParameters);
+
         mActivity.mCameraDevice.setParameters(mParameters);
         // Keep preview size up to date.
         mParameters = mActivity.mCameraDevice.getParameters();
@@ -2369,6 +2371,11 @@ public class VideoModule implements CameraModule,
 
             // Check if the current effects selection has changed
             if (updateEffectSelection()) return;
+
+            if (mActivity.setStoragePath(mPreferences)) {
+                mActivity.updateStorageSpaceAndHint();
+                mActivity.reuseCameraScreenNail(!mIsVideoCaptureIntent);
+            }
 
             readVideoPreferences();
             showTimeLapseUI(mCaptureTimeLapse);
@@ -2712,7 +2719,7 @@ public class VideoModule implements CameraModule,
         String title = Util.createJpegName(dateTaken);
         int orientation = Exif.getOrientation(data);
         Size s = mParameters.getPictureSize();
-        Uri uri = Storage.addImage(mContentResolver, title, dateTaken, loc, orientation, data,
+        Uri uri = Storage.getStorage().addImage(mContentResolver, title, dateTaken, loc, orientation, data,
                 s.width, s.height);
         if (uri != null) {
             Util.broadcastNewPicture(mActivity, uri);

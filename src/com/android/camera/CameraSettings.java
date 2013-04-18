@@ -27,6 +27,8 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.media.CamcorderProfile;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.util.FloatMath;
 import android.util.Log;
 
@@ -35,9 +37,9 @@ import com.android.gallery3d.common.ApiHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Locale;
 
 /**
  *  Provides utilities and keys for Camera settings.
@@ -74,7 +76,8 @@ public class CameraSettings {
     public static final String KEY_BURST_MODE = "pref_camera_burst_key";
     public static final String KEY_TIMER_MODE = "pref_camera_timer_key";
     public static final String KEY_TRUE_PREVIEW = "pref_true_preview";
-    
+    public static final String KEY_STORAGE = "pref_camera_storage_key";
+
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String VALUE_ON = "on";
     public static final String VALUE_OFF = "off";
@@ -185,6 +188,7 @@ public class CameraSettings {
         ListPreference isoMode = group.findPreference(KEY_ISO_MODE);
         ListPreference colorEffect = group.findPreference(KEY_COLOR_EFFECT);
         ListPreference videoColorEffect = group.findPreference(KEY_VIDEOCAMERA_COLOR_EFFECT);
+        ListPreference storage = group.findPreference(KEY_STORAGE);
 
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
@@ -254,6 +258,40 @@ public class CameraSettings {
         if (videoColorEffect != null) {
             filterUnsupportedOptions(group,
                     videoColorEffect, mParameters.getSupportedColorEffects());
+        }
+        if (storage != null) {
+            buildStorage(group, storage);
+        }
+    }
+
+    private void buildStorage(PreferenceGroup group, ListPreference storage) {
+        StorageManager sm = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
+        StorageVolume[] volumes = sm.getVolumeList();
+        String[] entries = new String[volumes.length];
+        String[] entryValues = new String[volumes.length];
+        int primary = 0;
+
+        if (volumes.length < 2) {
+            // No need for storage setting  264
+            removePreference(group, storage.getKey());
+            return;
+        }
+
+        for (int i = 0; i < volumes.length; i++) {
+            StorageVolume v = volumes[i];
+            entries[i] = v.getDescription(mContext);
+            entryValues[i] = v.getPath();
+            if (v.isPrimary()) {
+                primary = i;
+            }
+        }
+        storage.setEntries(entries);
+        storage.setEntryValues(entryValues);
+
+        // Filter saved invalid value
+        if (storage.findIndexOfValue(storage.getValue()) < 0) {
+            // Default to the primary storage
+            storage.setValueIndex(primary);
         }
     }
 

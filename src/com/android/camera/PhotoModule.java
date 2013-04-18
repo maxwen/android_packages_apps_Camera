@@ -484,6 +484,7 @@ public class PhotoModule
 
         mPreferences.setLocalId(mActivity, mCameraId);
         CameraSettings.upgradeLocalPreferences(mPreferences.getLocal());
+        mActivity.setStoragePath(mPreferences);
         // we need to reset exposure for the preview
         resetExposureCompensation();
         // Starting the preview needs preferences, camera screen nail, and
@@ -669,7 +670,7 @@ public class PhotoModule
         queue.addIdleHandler(new MessageQueue.IdleHandler() {
             @Override
             public boolean queueIdle() {
-                Storage.ensureOSXCompatible();
+                Storage.getStorage().ensureOSXCompatible();
                 return false;
             }
         });
@@ -900,7 +901,6 @@ public class PhotoModule
     }
 
     private void updateOnScreenIndicators() {
-
         updateSceneOnScreenIndicator(mParameters.getSceneMode());
         updateExposureOnScreenIndicator(CameraSettings.readExposure(mPreferences));
         updateFlashOnScreenIndicator(mParameters.getFlashMode());
@@ -978,7 +978,8 @@ public class PhotoModule
             // i.e. If monkey/a user swipes to the gallery during picture taking,
             // don't show animation
             if (ApiHelper.HAS_SURFACE_TEXTURE && !mIsImageCaptureIntent
-                    && mActivity.mShowCameraAppView) {
+                    && mActivity.mShowCameraAppView
+                    && !mBurstShotInProgress){
                 // Finish capture animation
                 ((CameraScreenNail) mActivity.mCameraScreenNail).animateSlide();
             }
@@ -1187,7 +1188,7 @@ public class PhotoModule
         // Runs in saver thread
         private void storeImage(final byte[] data, Uri uri, String title,
                 Location loc, int width, int height, int orientation) {
-            boolean ok = Storage.updateImage(mContentResolver, uri, title, loc,
+            boolean ok = Storage.getStorage().updateImage(mContentResolver, uri, title, loc,
                     orientation, data, width, height);
             if (ok) {
                 Util.broadcastNewPicture(mActivity, uri);
@@ -1277,13 +1278,13 @@ public class PhotoModule
         // Runs in namer thread
         private void generateUri() {
             mTitle = Util.createJpegName(mDateTaken);
-            mUri = Storage.newImage(mResolver, mTitle, mDateTaken, mWidth, mHeight);
+            mUri = Storage.getStorage().newImage(mResolver, mTitle, mDateTaken, mWidth, mHeight);
         }
 
         // Runs in namer thread
         private void cleanOldUri() {
             if (mUri == null) return;
-            Storage.deleteImage(mResolver, mUri);
+            Storage.getStorage().deleteImage(mResolver, mUri);
             mUri = null;
         }
     }
@@ -1339,7 +1340,6 @@ public class PhotoModule
         mParameters.setRotation(mJpegRotation);
         Location loc = mLocationManager.getCurrentLocation();
         Util.setGpsParameters(mParameters, loc);
-        CameraSettings.dumpParameters(mParameters);
         mCameraDevice.setParameters(mParameters);
 
         mCameraDevice.takePicture2(mShutterCallback, mRawPictureCallback,
@@ -1698,12 +1698,14 @@ public class PhotoModule
         mFocusManager.doSnap();
         mBurstShotsDone++;
 
-        if (mBurstShotsDone == nbBurstShots) {
+        if (mBurstShotsDone >= nbBurstShots) {
             mBurstShotsDone = 0;
+            mBurstShotInProgress = false;
             mSnapshotOnIdle = false;
         } else if (mSnapshotOnIdle == false) {
             // queue a new shot until we done all our shots
             mSnapshotOnIdle = true;
+            mBurstShotInProgress = true;
         }
     }
 
@@ -2606,6 +2608,11 @@ public class PhotoModule
         boolean recordLocation = RecordLocationPreference.get(
                 mPreferences, mContentResolver);
         mLocationManager.recordLocation(recordLocation);
+
+        if (mActivity.setStoragePath(mPreferences)) {
+            mActivity.updateStorageSpaceAndHint();
+            mActivity.reuseCameraScreenNail(!mIsImageCaptureIntent);
+        }
 
         setCameraParametersWhenIdle(UPDATE_PARAM_PREFERENCE);
         setPreviewFrameLayoutAspectRatio();
