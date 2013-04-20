@@ -486,7 +486,9 @@ public class PhotoModule
         CameraSettings.upgradeLocalPreferences(mPreferences.getLocal());
         mActivity.setStoragePath(mPreferences);
         // we need to reset exposure for the preview
-        resetExposureCompensation();
+        // maxwen: nope :)
+        //resetExposureCompensation();
+        
         // Starting the preview needs preferences, camera screen nail, and
         // focus area indicator.
         mStartPreviewPrerequisiteReady.open();
@@ -857,7 +859,6 @@ public class PhotoModule
             break;
         }
         mExposureIndicator.setImageResource(id);
-
     }
 
     private void updateFlashOnScreenIndicator(String value) {
@@ -902,7 +903,7 @@ public class PhotoModule
 
     private void updateOnScreenIndicators() {
         updateSceneOnScreenIndicator(mParameters.getSceneMode());
-        updateExposureOnScreenIndicator(CameraSettings.readExposure(mPreferences));
+        updateExposureOnScreenIndicator(CameraSettings.readExposure(mPreferences, CameraSettings.KEY_EXPOSURE));
         updateFlashOnScreenIndicator(mParameters.getFlashMode());
         updateHdrOnScreenIndicator(mParameters.getSceneMode());
     }
@@ -1738,7 +1739,7 @@ public class PhotoModule
 
         // Start the preview if it is not started.
         if (mCameraState == PREVIEW_STOPPED && mCameraStartUpThread == null) {
-            resetExposureCompensation();
+            //resetExposureCompensation();
             mCameraStartUpThread = new CameraStartUpThread();
             mCameraStartUpThread.start();
         }
@@ -2430,7 +2431,7 @@ public class PhotoModule
         }
 
         // Set exposure compensation
-        int value = CameraSettings.readExposure(mPreferences);
+        int value = CameraSettings.readExposure(mPreferences, CameraSettings.KEY_EXPOSURE);
         int max = mParameters.getMaxExposureCompensation();
         int min = mParameters.getMinExposureCompensation();
         if (value >= min && value <= max) {
@@ -2492,7 +2493,16 @@ public class PhotoModule
             Log.d(TAG, "true preview changed");
             Size previewSize = mParameters.getPreviewSize();
             updateCameraScreenNailSize(previewSize.width, previewSize.height);
-        }        
+        }
+
+        if (Util.hasHTCPictureOptions()){     
+            mParameters.set("contrast", mPreferences.getString(CameraSettings.KEY_CONTRAST,
+                CameraSettings.CONTRAST_DEFAULT_VALUE));
+            mParameters.set("saturation", mPreferences.getString(CameraSettings.KEY_SATURATION,
+                CameraSettings.SATURATION_DEFAULT_VALUE));
+            mParameters.set("sharpness", mPreferences.getString(CameraSettings.KEY_SHARPNESS,
+                CameraSettings.SHARPNESS_DEFAULT_VALUE));
+        }
     }
 
     @TargetApi(ApiHelper.VERSION_CODES.JELLY_BEAN)
