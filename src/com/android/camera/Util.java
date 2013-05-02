@@ -255,6 +255,10 @@ public class Util {
         return sNoFaceDetectOnFrontCamera;
     }
 
+    public static boolean isSpeechRecognitionRunning() {
+        return mSpeechActive;
+    }
+    
     public static void enableSpeechRecognition(boolean enable, PhotoModule module) {
         if (module != null) {
             mPhotoModule = module;

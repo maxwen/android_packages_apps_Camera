@@ -907,17 +907,35 @@ public class PhotoModule
             return;
         }
         if (active) {
+            stopTimer();
+            // force removing the timer indicator
+            updateTimerModeIndicator(false, mTimerRunning, mTimerValue);
             mVSIndicator.setImageResource(R.drawable.ic_switch_voiceshutter);
         } else {
             mVSIndicator.setImageBitmap(null);
+            updateTimerModeIndicator(mTimerValue != 0, mTimerRunning, mTimerValue);
         }
     }
 
+    public void updateTimerModeIndicator(boolean active, boolean running, int timerSeconds) {
+        if (active) {
+            mTimerModeTimeView.setText(secondToTimeString(timerSeconds));
+            if (running){
+                mTimerModeTimeView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_recording_indicator_on, 0, 0, 0);
+            } else {
+                mTimerModeTimeView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_recording_indicator, 0, 0, 0);
+            }
+        	mTimerModeTimeView.setVisibility(View.VISIBLE);
+        } else {
+        	mTimerModeTimeView.setVisibility(View.GONE);
+        }
+    }
     private void updateOnScreenIndicators() {
         updateSceneOnScreenIndicator(mParameters.getSceneMode());
         updateExposureOnScreenIndicator(CameraSettings.readExposure(mPreferences, CameraSettings.KEY_EXPOSURE));
         updateFlashOnScreenIndicator(mParameters.getFlashMode());
         updateHdrOnScreenIndicator(mParameters.getSceneMode());
+        updateTimerModeIndicator(mTimerValue != 0, mTimerRunning, mTimerValue);
     }
 
     private final class ShutterCallback
@@ -1644,15 +1662,13 @@ public class PhotoModule
 
     @Override
     public void onShutterButtonFocus(boolean pressed) {
-		mTimerValue = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_TIMER_MODE, "0"));
-
         if (!mTimerMode) {
             if (mTimerValue != 0) {
                 mTimerMode = true;
             }
         }
 
-        if (mTimerMode || mPaused || collapseCameraControls()
+        if (mTimerMode || Util.isSpeechRecognitionRunning() || mPaused || collapseCameraControls()
                 || (mCameraState == SNAPSHOT_IN_PROGRESS)
                 || (mCameraState == PREVIEW_STOPPED)) return;
 
@@ -1674,7 +1690,19 @@ public class PhotoModule
 
     @Override
     public void onShutterButtonClick() {
-        if (mTimerRunning || mPaused || collapseCameraControls()
+        // pressing again stops the timer
+        if (mTimerRunning){
+            stopTimer();
+            return;
+    	}
+    	
+    	// pressing shutter stops running voice recognition
+    	if (Util.isSpeechRecognitionRunning()){
+    	    Util.enableSpeechRecognition(false, this);
+    	    return;
+    	}
+    	
+        if (mPaused || collapseCameraControls()
                 || (mCameraState == SWITCHING_CAMERA)
                 || (mCameraState == PREVIEW_STOPPED)) return;
 
@@ -1688,8 +1716,6 @@ public class PhotoModule
         Log.d(TAG, "onShutterButtonClick: mCameraState=" + mCameraState);
 
         if (mTimerMode) {
-            mTimerModeTimeView.setText(secondToTimeString(mTimerValue));
-        	mTimerModeTimeView.setVisibility(View.VISIBLE);
 			mTimerRunning = true;
             updateTimer(mTimerValue);
             return;
@@ -2515,6 +2541,8 @@ public class PhotoModule
             mParameters.set("sharpness", mPreferences.getString(CameraSettings.KEY_SHARPNESS,
                 CameraSettings.SHARPNESS_DEFAULT_VALUE));
         }
+        
+        mTimerValue = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_TIMER_MODE, "0"));
     }
 
     @TargetApi(ApiHelper.VERSION_CODES.JELLY_BEAN)
@@ -2846,9 +2874,8 @@ public class PhotoModule
             mFocusManager.doSnap();
             stopTimer();
         } else {
-        	// else it will be hidden on rotate during timer
-        	mTimerModeTimeView.setVisibility(View.VISIBLE);
-        	mTimerModeTimeView.setText(secondToTimeString(timerSeconds));
+            // update actual seconds of timer
+        	updateTimerModeIndicator(mTimerValue != 0, mTimerRunning, timerSeconds);
             Message timerMsg = Message.obtain();
             timerMsg.arg1 = timerSeconds;
             timerMsg.what = CAMERA_TIMER;
@@ -2859,8 +2886,8 @@ public class PhotoModule
     private void stopTimer() {
     	mTimerMode = false;
         mTimerRunning = false;
-        mTimerModeTimeView.setVisibility(View.GONE);
         mHandler.removeMessages(CAMERA_TIMER);
+        updateTimerModeIndicator(mTimerValue != 0, mTimerRunning, mTimerValue);
     }
     
     private String secondToTimeString(long seconds) {

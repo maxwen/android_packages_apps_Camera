@@ -123,8 +123,7 @@ public class PhotoController extends PieController
                 CameraSettings.KEY_JPEG,
                 CameraSettings.KEY_TIMER_MODE,
                 CameraSettings.KEY_BURST_MODE,
-                CameraSettings.KEY_FLASH_MODE,
-                CameraSettings.KEY_VOICE_SHUTTER};
+                CameraSettings.KEY_FLASH_MODE};
                 
         mPictureKeys= new String[] {
                 CameraSettings.KEY_SCENE_MODE,
