@@ -921,9 +921,9 @@ public class PhotoModule
         if (active) {
             mTimerModeTimeView.setText(secondToTimeString(timerSeconds));
             if (running){
-                mTimerModeTimeView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_recording_indicator_on, 0, 0, 0);
+                mTimerModeTimeView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_timer_indicator_running, 0, 0, 0);
             } else {
-                mTimerModeTimeView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_recording_indicator, 0, 0, 0);
+                mTimerModeTimeView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_timer_indicator_on, 0, 0, 0);
             }
         	mTimerModeTimeView.setVisibility(View.VISIBLE);
         } else {

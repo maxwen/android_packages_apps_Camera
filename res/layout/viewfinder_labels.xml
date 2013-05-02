@@ -21,7 +21,7 @@
     <TextView android:id="@+id/timer_mode_time"
             style="@style/OnViewfinderLabel"
             android:gravity="center"
-            android:drawableLeft="@drawable/ic_recording_indicator"
+            android:drawableLeft="@drawable/ic_timer_indicator_on"
             android:drawablePadding="5dp"
             android:visibility="gone" />
 </LinearLayout>
