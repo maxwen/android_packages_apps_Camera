@@ -24,9 +24,9 @@
     <!-- Samsung Camcorder Mode -->
     <bool name="needsSamsungCamMode">false</bool>
     <!-- HTC Camcorder Mode -->
-    <bool name="needsHTCCamMode">true</bool>
+    <bool name="needsHTCCamMode">false</bool>
     <!-- Disable face detection-->
-    <bool name="config_noFaceDetect">true</bool>
+    <bool name="config_noFaceDetect">false</bool>
     <!-- Force use of profile video size -->
     <bool name="useProfileVideoSize">false</bool>
     <!-- Allows setting video size before recording starts -->
@@ -39,7 +39,11 @@
     <!-- Use ZSL mode for Qualcomm cameras -->
     <bool name="enableZSL">false</bool>
     <!-- HTC extended picture paramaters - contrast, saturation, sharpness -->
-    <bool name="hasHTCPictureOptions">true</bool>
+    <bool name="hasHTCPictureOptions">false</bool>
     <!-- manual zoom step - volume keys -->
     <integer name="manualZoomStep">5</integer>
+    <!-- manual torch mode -->
+    <bool name="needsManualTorch">false</bool>
+    <!-- torch device to use -->
+    <string name="torchDevice">/sys/class/leds/flashlight/brightness</string>
 </resources>

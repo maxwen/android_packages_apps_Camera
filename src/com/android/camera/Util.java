@@ -172,6 +172,8 @@ public class Util {
     private static boolean mIsCountDownOn;
     private static AudioManager mAudioManager;
     private static boolean mIsMuted = false;
+    private static boolean mNeedsManualTorch = false;
+    private static String mTorchDevice;
 
     private Util() {
     }
@@ -217,6 +219,9 @@ public class Util {
 
         mShutterWords = context.getResources().getStringArray(
                     R.array.pref_camera_voiceshutter_triggerwords);
+        
+        mNeedsManualTorch = context.getResources().getBoolean(R.bool.needsManualTorch);
+        mTorchDevice = context.getResources().getString(R.bool.torchDevice);
     }
 
     public static int dpToPixel(int dp) {
@@ -936,9 +941,11 @@ public class Util {
     }   
      
     public static void doHandleTorch(boolean value) {
-    	final String flashDevice = "/sys/class/leds/flashlight/brightness";
+    	if (!mNeedsManualTorch){
+    		return:
+    	}
     	
-    	File f = new File(flashDevice);
+    	File f = new File(mTorchDevice);
     	if(f.exists() && f.canWrite()){
     		writeOneLine(flashDevice, value?"1":"0");
     	}
