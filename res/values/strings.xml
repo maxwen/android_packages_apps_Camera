@@ -115,6 +115,12 @@
     <!-- Settings screen, Picture size title -->
     <string name="pref_camera_picturesize_title">Picture size</string>
 
+    <!-- Settings screen, dialog choice for 13 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_13mp">13M pixels</string>
+    <!-- Settings screen, dialog choice for 12.8 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_12mp">12M pixels</string>
+    <!-- Settings screen, dialog choice for 11.5 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_9mp_wide">9M pixels wide</string>
     <!-- Settings screen, dialog choice for 8 megapixels picture size [CHAR LIMIT=15] -->
     <string name="pref_camera_picturesize_entry_8mp">8M pixels</string>
     <!-- Settings screen, dialog choice for 6 megapixels picture size [CHAR LIMIT=15] -->
