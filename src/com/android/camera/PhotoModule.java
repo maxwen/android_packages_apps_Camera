@@ -883,7 +883,7 @@ public class PhotoModule
             return;
         }
         if ((value == null) || Parameters.SCENE_MODE_AUTO.equals(value)
-                || Util.SCENE_MODE_HDR.equals(value)) {
+                || Util.isCameraHdrMode(value)) {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_off);
         } else {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_on);
@@ -894,7 +894,7 @@ public class PhotoModule
         if (mHdrIndicator == null) {
             return;
         }
-        if ((value != null) && Util.SCENE_MODE_HDR.equals(value)) {
+        if ((value != null) && Util.isCameraHdrMode(value)) {
             mHdrIndicator.setImageResource(R.drawable.ic_indicator_hdr_on);
         } else {
             mHdrIndicator.setImageResource(R.drawable.ic_indicator_hdr_off);
@@ -982,7 +982,7 @@ public class PhotoModule
             if (mPaused) {
                 return;
             }
-            if (mSceneMode == Util.SCENE_MODE_HDR) {
+            if (Util.isCameraHdrMode(mSceneMode)) {
                 mActivity.showSwitcher();
                 mActivity.setSwipingEnabled(true);
             }
@@ -1360,7 +1360,7 @@ public class PhotoModule
         mPostViewPictureCallbackTime = 0;
         mJpegImageData = null;
 
-        final boolean animateBefore = (mSceneMode == Util.SCENE_MODE_HDR);
+        final boolean animateBefore = Util.isCameraHdrMode(mSceneMode);
 
         if (animateBefore) {
             animateFlash();
@@ -1678,7 +1678,7 @@ public class PhotoModule
         Log.d(TAG, "onShutterButtonFocus: mCameraState=" + mCameraState);
         
         if (pressed) {
-            if (mSceneMode == Util.SCENE_MODE_HDR) {
+            if (Util.isCameraHdrMode(mSceneMode)) {
                 mActivity.hideSwitcher();
                 mActivity.setSwipingEnabled(false);
             }
@@ -2425,7 +2425,7 @@ public class PhotoModule
         String hdr = mPreferences.getString(CameraSettings.KEY_CAMERA_HDR,
                 mActivity.getString(R.string.pref_camera_hdr_default));
         if (mActivity.getString(R.string.setting_on_value).equals(hdr)) {
-            mSceneMode = Util.SCENE_MODE_HDR;
+            mSceneMode = Util.getCameraHdrSceneMode(mParameters);
         } else {
             mSceneMode = mPreferences.getString(
                 CameraSettings.KEY_SCENE_MODE,

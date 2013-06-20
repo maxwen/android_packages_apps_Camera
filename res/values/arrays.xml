@@ -327,6 +327,7 @@
         <item>@string/pref_camera_scenemode_entry_closeup</item>
 		<item>@string/pref_camera_scenemode_entry_fireworks</item>
         <item>@string/pref_camera_scenemode_entry_flowers</item>
+        <item>@string/pref_camera_scenemode_entry_hdr</item>
         <item>@string/pref_camera_scenemode_entry_landscape</item>
         <item>@string/pref_camera_scenemode_entry_night</item>
         <item>@string/pref_camera_scenemode_entry_portrait</item>
@@ -354,6 +355,7 @@
         <item>close-up</item>
 		<item>fireworks</item>                        
         <item>flowers</item>
+        <item>hdr</item>
         <item>landscape</item>
         <item>night</item>
         <item>portrait</item>

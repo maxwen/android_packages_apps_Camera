@@ -93,7 +93,8 @@ public class Util {
     private static final String AUTO_EXPOSURE_LOCK_SUPPORTED = "auto-exposure-lock-supported";
     private static final String AUTO_WHITE_BALANCE_LOCK_SUPPORTED = "auto-whitebalance-lock-supported";
     private static final String VIDEO_SNAPSHOT_SUPPORTED = "video-snapshot-supported";
-    public static final String SCENE_MODE_HDR = "backlight-hdr";
+    private static final String SCENE_MODE_HDR = "backlight-hdr";
+    private static final String SCENE_MODE_HDR1 = "hdr";
     public static final String TRUE = "true";
     public static final String FALSE = "false";
 
@@ -115,9 +116,24 @@ public class Util {
 
     public static boolean isCameraHdrSupported(Parameters params) {
         List<String> supported = params.getSupportedSceneModes();
-        return (supported != null) && supported.contains(SCENE_MODE_HDR);
+        return (supported != null) && (supported.contains(SCENE_MODE_HDR) || supported.contains(SCENE_MODE_HDR1));
     }
 
+    public static String getCameraHdrSceneMode(Parameters params) {
+        List<String> supported = params.getSupportedSceneModes();
+        if (supported != null && supported.contains(SCENE_MODE_HDR)){
+        	return SCENE_MODE_HDR;
+        }
+       	if (supported != null && supported.contains(SCENE_MODE_HDR1)){
+       		return SCENE_MODE_HDR1;
+       	}
+       	return "";
+    }
+    
+    public static boolean isCameraHdrMode(String sceneMode) {
+    	return sceneMode.equals(SCENE_MODE_HDR) || sceneMode.equals(SCENE_MODE_HDR1);
+    }
+    
     @TargetApi(ApiHelper.VERSION_CODES.ICE_CREAM_SANDWICH)
     public static boolean isMeteringAreaSupported(Parameters params) {
         if (ApiHelper.HAS_CAMERA_METERING_AREA) {
@@ -221,7 +237,7 @@ public class Util {
                     R.array.pref_camera_voiceshutter_triggerwords);
         
         mNeedsManualTorch = context.getResources().getBoolean(R.bool.needsManualTorch);
-        mTorchDevice = context.getResources().getString(R.bool.torchDevice);
+        mTorchDevice = context.getResources().getString(R.string.torchDevice);
     }
 
     public static int dpToPixel(int dp) {
@@ -941,13 +957,13 @@ public class Util {
     }   
      
     public static void doHandleTorch(boolean value) {
-    	if (!mNeedsManualTorch){
-    		return:
+    	if (!mNeedsManualTorch || mTorchDevice == null){
+    		return;
     	}
     	
     	File f = new File(mTorchDevice);
     	if(f.exists() && f.canWrite()){
-    		writeOneLine(flashDevice, value?"1":"0");
+    		writeOneLine(mTorchDevice, value?"1":"0");
     	}
     }
 
