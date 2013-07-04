@@ -46,4 +46,9 @@
     <bool name="needsManualTorch">false</bool>
     <!-- torch device to use -->
     <string name="torchDevice">/sys/class/leds/flashlight/brightness</string>
+    <!-- hdr video -->
+    <bool name="hasVideoHdr">false</bool>
+    <!-- hdr video setting -->
+    <string name="videoHdrParam" translatable="false">video-hdr</string>
+
 </resources>

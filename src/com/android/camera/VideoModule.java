@@ -225,7 +225,8 @@ public class VideoModule implements CameraModule,
     private View mOnScreenIndicators;
     private ImageView mFlashIndicator;
     private ImageView mExposureIndicator;
-
+    private ImageView mHdrIndicator;
+    
     private final Handler mHandler = new MainHandler();
 
     // The degrees of the device rotated clockwise from its natural orientation.
@@ -2060,6 +2061,14 @@ public class VideoModule implements CameraModule,
             Log.w(TAG, "invalid exposure range: " + value);
         }
 
+        // HDR
+        if (Util.isVideoHdrSupported(mParameters)) {
+            String videohdr = mPreferences.getString(
+                    CameraSettings.KEY_VIDEOCAMERA_HDR,
+                    mActivity.getString(R.string.pref_video_hdr_default));
+            mParameters.set(mActivity.getString(R.string.videoHdrParam), videohdr);
+        }
+
         if (Util.hasHTCPictureOptions()){     
             mParameters.set("contrast", mPreferences.getString(CameraSettings.KEY_VIDEOCAMERA_CONTRAST,
                 CameraSettings.CONTRAST_DEFAULT_VALUE));
@@ -2070,10 +2079,7 @@ public class VideoModule implements CameraModule,
         }
 
         CameraSettings.dumpParameters(mParameters);
-
         mActivity.mCameraDevice.setParameters(mParameters);
-        // Keep preview size up to date.
-        mParameters = mActivity.mCameraDevice.getParameters();
 
         String truePreviewValue = mPreferences.getString(CameraSettings.KEY_TRUE_PREVIEW, CameraSettings.VALUE_OFF);
         mTruePreview = truePreviewValue.equals(CameraSettings.VALUE_ON);
@@ -2222,6 +2228,7 @@ public class VideoModule implements CameraModule,
         mOnScreenIndicators = mRootView.findViewById(R.id.on_screen_indicators);
         mFlashIndicator = (ImageView) mRootView.findViewById(R.id.menu_flash_indicator);
         mExposureIndicator = (ImageView) mOnScreenIndicators.findViewById(R.id.menu_exposure_indicator);
+        mHdrIndicator = (ImageView) mOnScreenIndicators.findViewById(R.id.menu_hdr_indicator);
         if (mIsVideoCaptureIntent) {
             mActivity.hideSwitcher();
             // Cannot use RotateImageView for "done" and "cancel" button because
@@ -2411,6 +2418,7 @@ public class VideoModule implements CameraModule,
     private void updateOnScreenIndicators() {
         updateFlashOnScreenIndicator(mParameters.getFlashMode());
         updateExposureOnScreenIndicator(CameraSettings.readExposure(mPreferences, CameraSettings.KEY_VIDEOCAMERA_EXPOSURE));
+        updateHdrOnScreenIndicator();
     }
 
     private void updateFlashOnScreenIndicator(String value) {
@@ -2428,6 +2436,18 @@ public class VideoModule implements CameraModule,
             } else {
                 mFlashIndicator.setImageResource(R.drawable.ic_indicator_flash_off);
             }
+        }
+    }
+
+    private void updateHdrOnScreenIndicator() {
+        if (mHdrIndicator == null) {
+            return;
+        }
+        String videoHdr = mParameters.get(mActivity.getString(R.string.videoHdrParam));
+        if (videoHdr != null && videoHdr.equals(mActivity.getString(R.string.setting_on_value))) {
+            mHdrIndicator.setImageResource(R.drawable.ic_indicator_hdr_on);
+        } else {
+            mHdrIndicator.setImageResource(R.drawable.ic_indicator_hdr_off);
         }
     }
 

@@ -190,7 +190,8 @@ public class Util {
     private static boolean mIsMuted = false;
     private static boolean mNeedsManualTorch = false;
     private static String mTorchDevice;
-
+    private static boolean mVideoHdrSupported = false;
+    
     private Util() {
     }
 
@@ -238,6 +239,8 @@ public class Util {
         
         mNeedsManualTorch = context.getResources().getBoolean(R.bool.needsManualTorch);
         mTorchDevice = context.getResources().getString(R.string.torchDevice);
+
+        mVideoHdrSupported = context.getResources().getBoolean(R.bool.hasVideoHdr);
     }
 
     public static int dpToPixel(int dp) {
@@ -1066,4 +1069,8 @@ public class Util {
             }
         }
     };
+
+    public static boolean isVideoHdrSupported(Parameters params) {
+	    return mVideoHdrSupported;
+	}
 }

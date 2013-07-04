@@ -113,4 +113,10 @@
             camera:key="pref_camera_video_sharpness_key"
             camera:defaultValue="@string/pref_sharpness_default"
             camera:title="@string/pref_sharpness_title" />
+    <ListPreference
+            camera:key="pref_video_hdr_key"
+            camera:defaultValue="@string/pref_video_hdr_default"
+            camera:title="@string/pref_video_hdr"
+            camera:entries="@array/pref_video_hdr_entries"
+            camera:entryValues="@array/pref_video_hdr_entryvalues" />
 </PreferenceGroup>

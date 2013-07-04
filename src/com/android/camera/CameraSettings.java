@@ -86,6 +86,7 @@ public class CameraSettings {
     public static final String KEY_SHARPNESS = "pref_camera_sharpness_key";
     public static final String KEY_VIDEOCAMERA_SHARPNESS = "pref_camera_video_sharpness_key";
     public static final String KEY_VOICE_SHUTTER = "pref_voice_shutter_key";
+    public static final String KEY_VIDEOCAMERA_HDR = "pref_video_hdr_key";
 
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String SATURATION_DEFAULT_VALUE = "5";
@@ -211,6 +212,7 @@ public class CameraSettings {
         ListPreference contrast = group.findPreference(KEY_CONTRAST);
         ListPreference videoContrast = group.findPreference(KEY_VIDEOCAMERA_CONTRAST);  
         ListPreference voiceShutter = group.findPreference(KEY_VOICE_SHUTTER);
+        ListPreference videoHdr = group.findPreference(KEY_VIDEOCAMERA_HDR);
 
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
@@ -330,6 +332,9 @@ public class CameraSettings {
                 buildContrast(group, videoContrast);
             }
         }
+        if (videoHdr != null && !Util.isVideoHdrSupported(mParameters)) {
+			removePreference(group, videoHdr.getKey());
+		}
     }
 
     private void buildStorage(PreferenceGroup group, ListPreference storage) {

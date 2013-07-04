@@ -84,6 +84,27 @@ public class VideoController extends PieController
             });
             mRenderer.addItem(item);
         }
+
+        if (group.findPreference(CameraSettings.KEY_VIDEOCAMERA_HDR) != null) {
+            PieItem hdr = makeItem(R.drawable.ic_hdr);
+            hdr.setFixedSlice(FLOAT_PI_DIVIDED_BY_TWO, sweep);
+            hdr.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(PieItem item) {
+                    // Find the index of next camera.
+                    ListPreference pref = mPreferenceGroup
+                            .findPreference(CameraSettings.KEY_VIDEOCAMERA_HDR);
+                    if (pref != null) {
+                        // toggle hdr value
+                        int index = (pref.findIndexOfValue(pref.getValue()) + 1) % 2;
+                        pref.setValueIndex(index);
+                        onSettingChanged(pref);
+                    }
+                }
+            });
+            mRenderer.addItem(hdr);
+        }
+
         mOtherKeys = new String[] {
                 CameraSettings.KEY_STORAGE,
                 CameraSettings.KEY_RECORD_LOCATION,
@@ -98,7 +119,8 @@ public class VideoController extends PieController
                 CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE,
                 CameraSettings.KEY_VIDEOCAMERA_WHITE_BALANCE,
                 CameraSettings.KEY_VIDEOCAMERA_COLOR_EFFECT,
-                CameraSettings.KEY_VIDEOCAMERA_EXPOSURE,
+                CameraSettings.KEY_VIDEOCAMERA_COLOR_EFFECT,
+                CameraSettings.KEY_VIDEOCAMERA_HDR,
                 CameraSettings.KEY_VIDEOCAMERA_SATURATION,
                 CameraSettings.KEY_VIDEOCAMERA_CONTRAST,
                 CameraSettings.KEY_VIDEOCAMERA_SHARPNESS};
