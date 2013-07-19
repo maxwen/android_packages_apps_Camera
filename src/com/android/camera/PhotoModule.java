@@ -211,7 +211,9 @@ public class PhotoModule
     private Runnable mDoSnapRunnable = new Runnable() {
         @Override
         public void run() {
-            onShutterButtonClick();
+        	if (mBurstShotInProgress){
+            	doBurstShot();
+            }
         }
     };
 
@@ -1688,9 +1690,56 @@ public class PhotoModule
         }
     }
 
+    private void doBurstShot() {
+        if (mPaused || collapseCameraControls()
+                || (mCameraState == SWITCHING_CAMERA)
+                || (mCameraState == PREVIEW_STOPPED)) {
+                stopBurstMode();
+                return;
+		}
+		
+        // Do not take the picture if there is not enough storage.
+        if (mActivity.getStorageSpace() <= Storage.LOW_STORAGE_THRESHOLD) {
+            Log.i(TAG, "Not enough space or storage not ready. remaining="
+                    + mActivity.getStorageSpace());
+            stopBurstMode();
+            return;
+        }
+
+        // If the user wants to do a snapshot while the previous one is still
+        // in progress, remember the fact and do it after we finish the previous
+        // one and re-start the preview. Snapshot in progress also includes the
+        // state that autofocus is focusing and a picture will be taken when
+        // focus callback arrives.
+        if ((mFocusManager.isFocusingSnapOnFinish() || mCameraState == SNAPSHOT_IN_PROGRESS)
+                && !mIsImageCaptureIntent) {
+            mSnapshotOnIdle = true;
+            return;
+        }
+
+        int nbBurstShots = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_BURST_MODE, "1"));
+        
+        mFocusManager.doSnap();
+        mBurstShotsDone++;
+        
+        if (mBurstShotsDone >= nbBurstShots) {
+            stopBurstMode();
+        } else if (mSnapshotOnIdle == false) {
+            // queue a new shot until we done all our shots
+            mSnapshotOnIdle = true;
+            mBurstShotInProgress = true;
+        }
+	}
+	
+	private void stopBurstMode() {
+        mBurstShotsDone = 0;
+        mBurstShotInProgress = false;
+        mSnapshotOnIdle = false;
+	}
+	
     @Override
     public void onShutterButtonClick() {
-        // pressing again stops the timer
+        // pressing shutter stops the timer
         if (mTimerRunning){
             stopTimer();
             return;
@@ -1701,7 +1750,13 @@ public class PhotoModule
     	    Util.enableSpeechRecognition(false, this);
     	    return;
     	}
-    	
+        
+    	// pressing shutter stops burst mode
+    	if (mBurstShotInProgress){
+    		stopBurstMode();
+    		return;
+    	}
+
         if (mPaused || collapseCameraControls()
                 || (mCameraState == SWITCHING_CAMERA)
                 || (mCameraState == PREVIEW_STOPPED)) return;
@@ -1721,8 +1776,6 @@ public class PhotoModule
             return;
         }
 
-        int nbBurstShots = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_BURST_MODE, "1"));
-
         // If the user wants to do a snapshot while the previous one is still
         // in progress, remember the fact and do it after we finish the previous
         // one and re-start the preview. Snapshot in progress also includes the
@@ -1733,16 +1786,13 @@ public class PhotoModule
             mSnapshotOnIdle = true;
             return;
         }
-
+        
         mFocusManager.doSnap();
-        mBurstShotsDone++;
 
-        if (mBurstShotsDone >= nbBurstShots) {
-            mBurstShotsDone = 0;
-            mBurstShotInProgress = false;
-            mSnapshotOnIdle = false;
-        } else if (mSnapshotOnIdle == false) {
-            // queue a new shot until we done all our shots
+        int nbBurstShots = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_BURST_MODE, "1"));        
+        if (nbBurstShots > 1){
+            // start shots
+            mBurstShotsDone++;
             mSnapshotOnIdle = true;
             mBurstShotInProgress = true;
         }
