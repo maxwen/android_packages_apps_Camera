@@ -30,6 +30,11 @@ public class CameraErrorCallback
             // snapshot or recording). Closing the app is better than creating a
             // new Camera object.
             throw new RuntimeException("Media server died.");
+        } else if (error == android.hardware.Camera.CAMERA_ERROR_UNKNOWN) {
+            // We are not sure about the current state of the app (in preview or
+            // snapshot or recording). Closing the app is better than creating a
+            // new Camera object.
+            throw new RuntimeException("Camera error.");
         }
     }
 }
