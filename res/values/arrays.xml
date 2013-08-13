@@ -517,14 +517,17 @@
 
     <!-- Camera Preferences Color effect dialog box entries -->
     <!-- effect-values=mono,negative,none,posterize,sepia,aqua,solarize,nv-vivid,nv-emboss -->
+    <!-- mono,negative,solarize,sepia,posterize,whiteboard,blackboard,aqua,emboss,sketch,neon -->
     <string-array name="pref_camera_coloreffect_entries" translatable="false">
         <item>@string/pref_camera_coloreffect_entry_none</item>
         <item>@string/pref_camera_coloreffect_entry_aqua</item>
         <item>@string/pref_camera_coloreffect_entry_emboss</item>
         <item>@string/pref_camera_coloreffect_entry_mono</item>
         <item>@string/pref_camera_coloreffect_entry_negative</item>
+        <item>@string/pref_camera_coloreffect_entry_neon</item>
         <item>@string/pref_camera_coloreffect_entry_posterize</item>
         <item>@string/pref_camera_coloreffect_entry_sepia</item>
+        <item>@string/pref_camera_coloreffect_entry_sketch</item>
         <item>@string/pref_camera_coloreffect_entry_solarize</item>
         <item>@string/pref_camera_coloreffect_entry_vivid</item>
     </string-array>
@@ -535,8 +538,10 @@
         <item>nv-emboss</item>
         <item>mono</item>
         <item>negative</item>
+        <item>neon</item>
         <item>posterize</item>
         <item>sepia</item>
+        <item>sketch</item>
         <item>solarize</item>
         <item>nv-vivid</item>
     </string-array>
