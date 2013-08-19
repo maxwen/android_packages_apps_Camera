@@ -188,6 +188,7 @@ public class CameraSettings {
         ListPreference timeLapseInterval = group.findPreference(KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL);
         ListPreference pictureSize = group.findPreference(KEY_PICTURE_SIZE);
         ListPreference whiteBalance =  group.findPreference(KEY_WHITE_BALANCE);
+        ListPreference videoWhiteBalance =  group.findPreference(KEY_VIDEOCAMERA_WHITE_BALANCE);
         ListPreference sceneMode = group.findPreference(KEY_SCENE_MODE);
         ListPreference flashMode = group.findPreference(KEY_FLASH_MODE);
         ListPreference focusMode = group.findPreference(KEY_FOCUS_MODE);
@@ -213,7 +214,7 @@ public class CameraSettings {
         ListPreference videoContrast = group.findPreference(KEY_VIDEOCAMERA_CONTRAST);  
         ListPreference voiceShutter = group.findPreference(KEY_VOICE_SHUTTER);
         ListPreference videoHdr = group.findPreference(KEY_VIDEOCAMERA_HDR);
-
+        
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
         if (videoQuality != null) {
@@ -228,6 +229,10 @@ public class CameraSettings {
         if (whiteBalance != null) {
             filterUnsupportedOptions(group,
                     whiteBalance, mParameters.getSupportedWhiteBalance());
+        }
+        if (videoWhiteBalance != null) {
+            filterUnsupportedOptions(group,
+                    videoWhiteBalance, mParameters.getSupportedWhiteBalance());
         }
         if (sceneMode != null) {
             filterUnsupportedOptions(group,
