@@ -2439,12 +2439,22 @@ public class VideoModule implements CameraModule,
         }
     }
 
+    private boolean isVideoHDROn() {
+        if (!Util.isVideoHdrSupported(mParameters)){
+            return false;
+        }
+        String videoHdr = mParameters.get(mActivity.getString(R.string.videoHdrParam));
+        if (videoHdr != null && videoHdr.equals(mActivity.getString(R.string.setting_on_value))) {
+            return true;
+        }
+        return false;
+    }
+
     private void updateHdrOnScreenIndicator() {
         if (mHdrIndicator == null) {
             return;
         }
-        String videoHdr = mParameters.get(mActivity.getString(R.string.videoHdrParam));
-        if (videoHdr != null && videoHdr.equals(mActivity.getString(R.string.setting_on_value))) {
+        if (isVideoHDROn()) {
             mHdrIndicator.setImageResource(R.drawable.ic_indicator_hdr_on);
         } else {
             mHdrIndicator.setImageResource(R.drawable.ic_indicator_hdr_off);
@@ -2641,7 +2651,7 @@ public class VideoModule implements CameraModule,
         }
 
         if (mPaused || mSnapshotInProgress || effectsActive()
-                || !Util.isVideoSnapshotSupported(mParameters)) {
+                || !Util.isVideoSnapshotSupported(mParameters) || isVideoHDROn()) {
             return;
         }
 
