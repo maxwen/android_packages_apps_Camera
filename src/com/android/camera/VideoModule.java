@@ -569,6 +569,9 @@ public class VideoModule implements CameraModule,
         mVideoControl.overrideSettings(
                         CameraSettings.KEY_VIDEO_QUALITY,
                         null);
+        mVideoControl.overrideSettings(
+                        CameraSettings.KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL,
+                        null);
 
         if (effectsActive()) {
             mVideoControl.overrideSettings(
@@ -588,6 +591,10 @@ public class VideoModule implements CameraModule,
                     mVideoControl.overrideSettings(
                         CameraSettings.KEY_VIDEO_QUALITY,
                         Integer.toString(getLowVideoQuality()));
+                    mVideoControl.overrideSettings(
+                        CameraSettings.KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL,
+                        Integer.toString(0));
+
             }
         }
     }
@@ -2677,7 +2684,10 @@ public class VideoModule implements CameraModule,
         }
 
         if (mPaused || mSnapshotInProgress || effectsActive()
-                || !Util.isVideoSnapshotSupported(mParameters) || Util.isVideoHDROn(mActivity, mParameters)) {
+                || mCaptureTimeLapse
+                || !Util.isVideoSnapshotSupported(mParameters) 
+                || Util.isVideoHDROn(mActivity, mParameters)
+                || Util.isVideoHfrOn(mActivity, mParameters)) {
             return;
         }
 
