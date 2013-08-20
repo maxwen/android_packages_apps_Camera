@@ -155,7 +155,7 @@ public class MoreSettingPopup extends AbstractSettingPopup
         }
     }
 
-    // Scene mode can override other camera settings (ex: flash mode).
+    // Scene mode can override other camera settings
     public void overrideSettings(final String ... keyvalues) {
         int count = mEnabled == null ? 0 : mEnabled.length;
         for (int i = 0; i < keyvalues.length; i += 2) {

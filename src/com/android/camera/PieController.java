@@ -183,7 +183,7 @@ public class PieController {
         }
     }
 
-    // Scene mode may override other camera settings (ex: flash mode).
+    // Scene mode may override other camera settings
     public void overrideSettings(final String ... keyvalues) {
         if (keyvalues.length % 2 != 0) {
             throw new IllegalArgumentException();

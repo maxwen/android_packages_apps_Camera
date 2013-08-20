@@ -1485,21 +1485,18 @@ public class PhotoModule
     }
 
     private void updateSceneModeUI() {
-        // If scene mode is set, we cannot set flash mode, white balance, and
+        // If scene mode is set, we cannot set white balance, and
         // focus mode, instead, we read it from driver
         if (!Parameters.SCENE_MODE_AUTO.equals(mSceneMode)) {
-            overrideCameraSettings(mParameters.getFlashMode(),
-                    mParameters.getWhiteBalance(), mParameters.getFocusMode());
+            overrideCameraSettings(mParameters.getWhiteBalance(), mParameters.getFocusMode());
         } else {
-            overrideCameraSettings(null, null, null);
+            overrideCameraSettings(null, null);
         }
     }
 
-    private void overrideCameraSettings(final String flashMode,
-            final String whiteBalance, final String focusMode) {
+    private void overrideCameraSettings(final String whiteBalance, final String focusMode) {
         if (mPhotoControl != null) {
             mPhotoControl.overrideSettings(
-                    CameraSettings.KEY_FLASH_MODE, flashMode,
                     CameraSettings.KEY_WHITE_BALANCE, whiteBalance,
                     CameraSettings.KEY_FOCUS_MODE, focusMode);
         }
@@ -2484,7 +2481,7 @@ public class PhotoModule
             if (!mParameters.getSceneMode().equals(mSceneMode)) {
                 mParameters.setSceneMode(mSceneMode);
 
-                // Setting scene mode will change the settings of flash mode,
+                // Setting scene mode will change the settings of
                 // white balance, and focus mode. Here we read back the
                 // parameters, so we can know those settings.
                 mCameraDevice.setParameters(mParameters);
@@ -2537,22 +2534,23 @@ public class PhotoModule
             Log.w(TAG, "invalid exposure range: " + value);
         }
 
-        if (Parameters.SCENE_MODE_AUTO.equals(mSceneMode)) {
-            // Set flash mode.
-            String flashMode = mPreferences.getString(
+
+        // Set flash mode.
+        String flashMode = mPreferences.getString(
                     CameraSettings.KEY_FLASH_MODE,
                     mActivity.getString(R.string.pref_camera_flashmode_default));
-            List<String> supportedFlash = mParameters.getSupportedFlashModes();
-            if (Util.isSupported(flashMode, supportedFlash)) {
-                mParameters.setFlashMode(flashMode);
-            } else {
-                flashMode = mParameters.getFlashMode();
-                if (flashMode == null) {
-                    flashMode = mActivity.getString(
-                            R.string.pref_camera_flashmode_no_flash);
-                }
+        List<String> supportedFlash = mParameters.getSupportedFlashModes();
+        if (Util.isSupported(flashMode, supportedFlash)) {
+            mParameters.setFlashMode(flashMode);
+        } else {
+            flashMode = mParameters.getFlashMode();
+            if (flashMode == null) {
+                flashMode = mActivity.getString(
+                        R.string.pref_camera_flashmode_no_flash);
             }
+        }
 
+        if (Parameters.SCENE_MODE_AUTO.equals(mSceneMode)) {
             // Set white balance parameter.
             String whiteBalance = mPreferences.getString(
                     CameraSettings.KEY_WHITE_BALANCE,
