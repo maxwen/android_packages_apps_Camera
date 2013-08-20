@@ -130,10 +130,12 @@ public class ListPreference extends CameraPreference {
     
     public void overrideValue(String value) {
         mOverwrittenValue = value;
+        persistStringValue(value);
     }
     
     public void overrideReset() {
         mOverwrittenValue = null;
+        persistStringValue(mValue);
     }
 
     public void setValueIndex(int index) {
