@@ -2592,11 +2592,17 @@ public class PhotoModule
 
         if (Util.hasHTCPictureOptions()){     
             mParameters.set("contrast", mPreferences.getString(CameraSettings.KEY_CONTRAST,
-                CameraSettings.CONTRAST_DEFAULT_VALUE));
+                CameraSettings.CONTRAST_DEFAULT_VALUE_HTC));
             mParameters.set("saturation", mPreferences.getString(CameraSettings.KEY_SATURATION,
                 CameraSettings.SATURATION_DEFAULT_VALUE));
             mParameters.set("sharpness", mPreferences.getString(CameraSettings.KEY_SHARPNESS,
-                CameraSettings.SHARPNESS_DEFAULT_VALUE));
+                CameraSettings.SHARPNESS_DEFAULT_VALUE_HTC));
+        }
+        if (Util.hasExtendedPictureOptions()){     
+            mParameters.set("contrast", mPreferences.getString(CameraSettings.KEY_CONTRAST,
+                CameraSettings.CONTRAST_DEFAULT_VALUE_OTHER));
+            mParameters.set("saturation", mPreferences.getString(CameraSettings.KEY_SATURATION,
+                CameraSettings.SATURATION_DEFAULT_VALUE));
         }
         
         mTimerValue = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_TIMER_MODE, "0"));

@@ -91,9 +91,10 @@ public class CameraSettings {
     
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String SATURATION_DEFAULT_VALUE = "5";
-    public static final String CONTRAST_DEFAULT_VALUE = "0";
-    public static final String SHARPNESS_DEFAULT_VALUE = "0";
-        
+    public static final String CONTRAST_DEFAULT_VALUE_HTC = "0";
+    public static final String CONTRAST_DEFAULT_VALUE_OTHER = "5";
+    public static final String SHARPNESS_DEFAULT_VALUE_HTC = "0";
+            
     public static final String VALUE_ON = "on";
     public static final String VALUE_OFF = "off";
 
@@ -296,14 +297,14 @@ public class CameraSettings {
         }
         
         if (saturation!=null){
-            if (!Util.hasHTCPictureOptions()){
+            if (!Util.hasHTCPictureOptions() && !Util.hasExtendedPictureOptions()){
                 removePreference(group, saturation.getKey());
             } else {
                 buildSaturation(group, saturation);
             }
         }
         if (videoSaturation!=null){
-            if (!Util.hasHTCPictureOptions()){
+            if (!Util.hasHTCPictureOptions() && !Util.hasExtendedPictureOptions()){
                 removePreference(group, videoSaturation.getKey());
             } else {
                 buildSaturation(group, videoSaturation);
@@ -326,14 +327,14 @@ public class CameraSettings {
         }
 
         if (contrast!=null){
-            if (!Util.hasHTCPictureOptions()){
+            if (!Util.hasHTCPictureOptions() && !Util.hasExtendedPictureOptions()){
                 removePreference(group, contrast.getKey());
             } else {
                 buildContrast(group, contrast);
             }
         }
         if (videoContrast!=null){
-            if (!Util.hasHTCPictureOptions()){
+            if (!Util.hasHTCPictureOptions() && !Util.hasExtendedPictureOptions()){
                 removePreference(group, videoContrast.getKey());
             } else {
                 buildContrast(group, videoContrast);
@@ -432,33 +433,46 @@ public class CameraSettings {
     }
 
     private void buildSharpness(PreferenceGroup group, ListPreference sharpness){
-        String entries[] = new String[5];
-        String entryValues[] = new String[5];
+            String entries[] = new String[5];
+            String entryValues[] = new String[5];
 
-        int j=-2;
-        for(int i=0; i<entries.length; i++){
-            entries[i] = Integer.toString(j);
-            entryValues[i] = Integer.toString(j);
-            j+=1;
-        }
- 
-        sharpness.setEntries(entries);
-        sharpness.setEntryValues(entryValues);
+            int j=-2;
+            for(int i=0; i<entries.length; i++){
+                entries[i] = Integer.toString(j);
+                entryValues[i] = Integer.toString(j);
+                j+=1;
+            }
+            sharpness.setEntries(entries);
+            sharpness.setEntryValues(entryValues);
     }
 
     private void buildContrast(PreferenceGroup group, ListPreference contrast){
-        String entries[] = new String[11];
-        String entryValues[] = new String[11];
+        if (Util.hasHTCPictureOptions()){
+            String entries[] = new String[11];
+            String entryValues[] = new String[11];
 
-        int j=-100;
-        for(int i=0; i<entries.length; i++){
-            entries[i] = Integer.toString(j);
-            entryValues[i] = Integer.toString(j);
-            j+=20;
-        }
+            int j=-100;
+            for(int i=0; i<entries.length; i++){
+                entries[i] = Integer.toString(j);
+                entryValues[i] = Integer.toString(j);
+                j+=20;
+            }
  
-        contrast.setEntries(entries);
-        contrast.setEntryValues(entryValues);
+            contrast.setEntries(entries);
+            contrast.setEntryValues(entryValues);
+        }
+        if (Util.hasExtendedPictureOptions()){ 
+            String entries[] = new String[11];
+            String entryValues[] = new String[11];
+
+            for(int i=0; i<entries.length; i++){
+                entries[i] = Integer.toString(i);
+                entryValues[i] = Integer.toString(i);
+            }
+ 
+            contrast.setEntries(entries);
+            contrast.setEntryValues(entryValues);
+        }
     }    
     
     private void buildCameraId(

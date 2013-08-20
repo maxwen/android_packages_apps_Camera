@@ -182,6 +182,7 @@ public class Util {
     private static boolean sHTCCamMode;
     private static boolean sNoFaceDetect;
     private static boolean sHTCPictureOptions;
+    private static boolean sExtendedPictureOptions;
     private static int sManualZoomStep;
 
     // For setting video size before recording starts
@@ -223,6 +224,7 @@ public class Util {
         sSamsungCamMode = context.getResources().getBoolean(R.bool.needsSamsungCamMode);
         sHTCCamMode = context.getResources().getBoolean(R.bool.needsHTCCamMode);
         sHTCPictureOptions = context.getResources().getBoolean(R.bool.hasHTCPictureOptions);
+        sExtendedPictureOptions = context.getResources().getBoolean(R.bool.hasExtendedPictureOptions);
         sManualZoomStep = context.getResources().getInteger(R.integer.manualZoomStep);
         
         sProfileVideoSize = context.getResources().getBoolean(R.bool.useProfileVideoSize);
@@ -266,6 +268,10 @@ public class Util {
 
     public static boolean hasHTCPictureOptions() {
         return sHTCPictureOptions;
+    }
+
+    public static boolean hasExtendedPictureOptions() {
+        return sExtendedPictureOptions;
     }
 
     public static boolean noFaceDetect() {

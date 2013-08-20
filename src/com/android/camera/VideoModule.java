@@ -2111,13 +2111,19 @@ public class VideoModule implements CameraModule,
             Util.setVideoHfrMode(mActivity, mParameters, videohfr);
         }
 
-        if (Util.hasHTCPictureOptions()){     
+        if (Util.hasHTCPictureOptions()){
             mParameters.set("contrast", mPreferences.getString(CameraSettings.KEY_VIDEOCAMERA_CONTRAST,
-                CameraSettings.CONTRAST_DEFAULT_VALUE));
+                CameraSettings.CONTRAST_DEFAULT_VALUE_HTC));
             mParameters.set("saturation", mPreferences.getString(CameraSettings.KEY_VIDEOCAMERA_SATURATION,
                 CameraSettings.SATURATION_DEFAULT_VALUE));
             mParameters.set("sharpness", mPreferences.getString(CameraSettings.KEY_VIDEOCAMERA_SHARPNESS,
-                CameraSettings.SHARPNESS_DEFAULT_VALUE));
+                CameraSettings.SHARPNESS_DEFAULT_VALUE_HTC));
+        }
+        if (Util.hasExtendedPictureOptions()){
+            mParameters.set("contrast", mPreferences.getString(CameraSettings.KEY_VIDEOCAMERA_CONTRAST,
+                CameraSettings.CONTRAST_DEFAULT_VALUE_OTHER));
+            mParameters.set("saturation", mPreferences.getString(CameraSettings.KEY_VIDEOCAMERA_SATURATION,
+                CameraSettings.SATURATION_DEFAULT_VALUE));
         }
 
         CameraSettings.dumpParameters(mParameters);
