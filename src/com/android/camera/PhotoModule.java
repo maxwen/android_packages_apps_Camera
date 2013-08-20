@@ -1498,12 +1498,10 @@ public class PhotoModule
     private void overrideCameraSettings(final String flashMode,
             final String whiteBalance, final String focusMode) {
         if (mPhotoControl != null) {
-//            mPieControl.enableFilter(true);
             mPhotoControl.overrideSettings(
                     CameraSettings.KEY_FLASH_MODE, flashMode,
                     CameraSettings.KEY_WHITE_BALANCE, whiteBalance,
                     CameraSettings.KEY_FOCUS_MODE, focusMode);
-//            mPieControl.enableFilter(false);
         }
     }
 

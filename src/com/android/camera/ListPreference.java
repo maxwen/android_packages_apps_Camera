@@ -34,6 +34,7 @@ public class ListPreference extends CameraPreference {
     private static final String TAG = "ListPreference";
     private final String mKey;
     private String mValue;
+    private String mOverwrittenValue;
     private final CharSequence[] mDefaultValues;
 
     private CharSequence[] mEntries;
@@ -95,6 +96,9 @@ public class ListPreference extends CameraPreference {
                     findSupportedDefaultValue());
             mLoaded = true;
         }
+        if (mOverwrittenValue!=null){
+            return mOverwrittenValue;
+        }
         return mValue;
     }
 
@@ -122,6 +126,14 @@ public class ListPreference extends CameraPreference {
        	}
         mValue = value;
         persistStringValue(value);
+    }
+    
+    public void overrideValue(String value) {
+        mOverwrittenValue = value;
+    }
+    
+    public void overrideReset() {
+        mOverwrittenValue = null;
     }
 
     public void setValueIndex(int index) {

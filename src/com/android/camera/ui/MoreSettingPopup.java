@@ -164,8 +164,12 @@ public class MoreSettingPopup extends AbstractSettingPopup
             for (int j = 0; j < count; j++) {
                 ListPreference pref = mListItem.get(j);
                 if (pref != null && key.equals(pref.getKey())) {
-                    // Change preference
-                    if (value != null) pref.setValue(value);
+                    // override preference
+                    if (value != null) {
+                        pref.overrideValue(value);
+                    } else {
+                        pref.overrideReset();
+                    }
                     // If the preference is overridden, disable the preference
                     boolean enable = value == null;
                     mEnabled[j] = enable;
