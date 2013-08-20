@@ -559,10 +559,36 @@ public class VideoModule implements CameraModule,
     private void initializeVideoControl() {
         loadCameraPreferences();
         mVideoControl.initialize(mPreferenceGroup);
+        updateEnablement();
+    }
+    
+    private void updateEnablement() {
+        mVideoControl.overrideSettings(
+                        CameraSettings.KEY_VIDEOCAMERA_HDR,
+                        null);
+        mVideoControl.overrideSettings(
+                        CameraSettings.KEY_VIDEO_QUALITY,
+                        null);
+
         if (effectsActive()) {
             mVideoControl.overrideSettings(
                     CameraSettings.KEY_VIDEO_QUALITY,
                     Integer.toString(getLowVideoQuality()));
+        }
+
+        if (Util.isVideoHfrSupported(mParameters)) {
+            String videohfr = mPreferences.getString(
+                        CameraSettings.KEY_VIDEOCAMERA_HFR,
+                        mActivity.getString(R.string.pref_video_hfr_default));
+	        // disable hdr on active hfr
+	        if (!videohfr.equals(mActivity.getString(R.string.setting_off_value))){
+                    mVideoControl.overrideSettings(
+                        CameraSettings.KEY_VIDEOCAMERA_HDR,
+                        mActivity.getString(R.string.setting_off_value));
+                    mVideoControl.overrideSettings(
+                        CameraSettings.KEY_VIDEO_QUALITY,
+                        Integer.toString(getLowVideoQuality()));
+            }
         }
     }
 
@@ -784,6 +810,7 @@ public class VideoModule implements CameraModule,
         }
         // TODO: This should be checked instead directly +1000.
         if (mCaptureTimeLapse) quality += 1000;
+
         mProfile = CamcorderProfile.get(mCameraId, quality);
         getDesiredPreviewSize();
     }
@@ -2066,7 +2093,15 @@ public class VideoModule implements CameraModule,
             String videohdr = mPreferences.getString(
                     CameraSettings.KEY_VIDEOCAMERA_HDR,
                     mActivity.getString(R.string.pref_video_hdr_default));
-            mParameters.set(mActivity.getString(R.string.videoHdrParam), videohdr);
+            mParameters.set(Util.VIDEO_HDR, videohdr);
+        }
+
+        // HFR
+        if (Util.isVideoHfrSupported(mParameters)) {
+            String videohfr = mPreferences.getString(
+                    CameraSettings.KEY_VIDEOCAMERA_HFR,
+                    mActivity.getString(R.string.pref_video_hfr_default));
+            Util.setVideoHfrMode(mActivity, mParameters, videohfr);
         }
 
         if (Util.hasHTCPictureOptions()){     
@@ -2393,6 +2428,8 @@ public class VideoModule implements CameraModule,
                 mActivity.reuseCameraScreenNail(!mIsVideoCaptureIntent);
             }
 
+            updateEnablement();
+            
             readVideoPreferences();
             showTimeLapseUI(mCaptureTimeLapse);
             // We need to restart the preview if preview size is changed.
@@ -2439,22 +2476,11 @@ public class VideoModule implements CameraModule,
         }
     }
 
-    private boolean isVideoHDROn() {
-        if (!Util.isVideoHdrSupported(mParameters)){
-            return false;
-        }
-        String videoHdr = mParameters.get(mActivity.getString(R.string.videoHdrParam));
-        if (videoHdr != null && videoHdr.equals(mActivity.getString(R.string.setting_on_value))) {
-            return true;
-        }
-        return false;
-    }
-
     private void updateHdrOnScreenIndicator() {
         if (mHdrIndicator == null) {
             return;
         }
-        if (isVideoHDROn()) {
+        if (Util.isVideoHDROn(mActivity, mParameters)) {
             mHdrIndicator.setImageResource(R.drawable.ic_indicator_hdr_on);
         } else {
             mHdrIndicator.setImageResource(R.drawable.ic_indicator_hdr_off);
@@ -2651,7 +2677,7 @@ public class VideoModule implements CameraModule,
         }
 
         if (mPaused || mSnapshotInProgress || effectsActive()
-                || !Util.isVideoSnapshotSupported(mParameters) || isVideoHDROn()) {
+                || !Util.isVideoSnapshotSupported(mParameters) || Util.isVideoHDROn(mActivity, mParameters)) {
             return;
         }
 

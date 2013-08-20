@@ -119,4 +119,11 @@
             camera:title="@string/pref_video_hdr"
             camera:entries="@array/pref_video_hdr_entries"
             camera:entryValues="@array/pref_video_hdr_entryvalues" />
+    <ListPreference
+            camera:key="pref_video_hfr_key"
+            camera:defaultValue="@string/pref_video_hfr_default"
+            camera:title="@string/pref_video_hfr"
+            camera:entries="@array/pref_video_hfr_entries"
+            camera:entryValues="@array/pref_video_hfr_entryvalues" />
+
 </PreferenceGroup>

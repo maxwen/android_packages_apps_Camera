@@ -247,10 +247,18 @@
     <!-- Default HDR entry value -->
     <string name="pref_camera_hdr_default">@string/setting_off_value</string>
 
-    <!-- Default HDR Video entry value -->
+    <!-- Default HDR Video en/pref_video_hdr_defaulttry value -->
 	<string name="pref_video_hdr_default" translatable="false">@string/setting_off_value</string>
 	<string name="pref_video_hdr">HDR</string>
-			
+
+    <!-- Default HFR Video en/pref_video_hdr_defaulttry value -->
+	<string name="pref_video_hfr_default" translatable="false">@string/setting_off_value</string>
+	<string name="pref_video_hfr">Slow motion</string>
+	<string name="video_hfr_setting_off">off</string>
+	<string name="video_hfr_setting_60">60</string>
+	<string name="video_hfr_setting_90">90</string>
+	<string name="video_hfr_setting_120">120</string> 
+	      			
     <!-- Dialog "OK" button. Dismisses dialog. -->
     <string name="dialog_ok">OK</string>
 

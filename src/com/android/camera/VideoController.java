@@ -87,11 +87,11 @@ public class VideoController extends PieController
 
         if (group.findPreference(CameraSettings.KEY_VIDEOCAMERA_HDR) != null) {
             PieItem hdr = makeItem(R.drawable.ic_hdr);
+            addPrefItem(hdr, CameraSettings.KEY_VIDEOCAMERA_HDR);
             hdr.setFixedSlice(FLOAT_PI_DIVIDED_BY_TWO, sweep);
             hdr.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(PieItem item) {
-                    // Find the index of next camera.
                     ListPreference pref = mPreferenceGroup
                             .findPreference(CameraSettings.KEY_VIDEOCAMERA_HDR);
                     if (pref != null) {
@@ -113,14 +113,14 @@ public class VideoController extends PieController
                 CameraSettings.KEY_VIDEO_QUALITY,
                 CameraSettings.KEY_VIDEO_EFFECT,
                 CameraSettings.KEY_VIDEOCAMERA_JPEG,
-                CameraSettings.KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL};
-
+                CameraSettings.KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL,
+                CameraSettings.KEY_VIDEOCAMERA_HDR,
+                CameraSettings.KEY_VIDEOCAMERA_HFR};
         mPictureKeys= new String[] {
                 CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE,
                 CameraSettings.KEY_VIDEOCAMERA_WHITE_BALANCE,
                 CameraSettings.KEY_VIDEOCAMERA_COLOR_EFFECT,
                 CameraSettings.KEY_VIDEOCAMERA_COLOR_EFFECT,
-                CameraSettings.KEY_VIDEOCAMERA_HDR,
                 CameraSettings.KEY_VIDEOCAMERA_SATURATION,
                 CameraSettings.KEY_VIDEOCAMERA_CONTRAST,
                 CameraSettings.KEY_VIDEOCAMERA_SHARPNESS};
@@ -217,15 +217,6 @@ public class VideoController extends PieController
     }
     
     public void popupDismissed(boolean topPopupOnly) {
-        if (mActivePopup == mPopup){
-            initializePopup();
-            mActivePopup = mPopup;
-        }
-        if (mActivePopup == mPicturePopup){
-            initializePicturePopup();
-            mActivePopup = mPicturePopup; 
-        }
-
         // if the 2nd level popup gets dismissed
         if (mSecondPopup != null) {
             mSecondPopup = null;

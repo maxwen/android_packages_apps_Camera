@@ -84,11 +84,11 @@ public class PhotoController extends PieController
         }
         if (group.findPreference(CameraSettings.KEY_CAMERA_HDR) != null) {
             PieItem hdr = makeItem(R.drawable.ic_hdr);
+            addPrefItem(hdr, CameraSettings.KEY_CAMERA_HDR);
             hdr.setFixedSlice(FLOAT_PI_DIVIDED_BY_TWO, sweep);
             hdr.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(PieItem item) {
-                    // Find the index of next camera.
                     ListPreference pref = mPreferenceGroup
                             .findPreference(CameraSettings.KEY_CAMERA_HDR);
                     if (pref != null) {
@@ -103,6 +103,7 @@ public class PhotoController extends PieController
         }
         if (group.findPreference(CameraSettings.KEY_VOICE_SHUTTER) != null) {
             PieItem item = makeItem(R.drawable.ic_switch_voiceshutter);
+            addPrefItem(item, CameraSettings.KEY_VOICE_SHUTTER);
             item.setFixedSlice((float)(3.5 * FLOAT_PI_DIVIDED_BY_TWO) + sweep, sweep);
             item.setOnClickListener(new OnClickListener() {
                 @Override
@@ -227,15 +228,6 @@ public class PhotoController extends PieController
     }
     
     public void popupDismissed(boolean topPopupOnly) {
-        if (mActivePopup == mPopup){
-            initializePopup();
-            mActivePopup = mPopup;
-        }
-        if (mActivePopup == mPicturePopup){
-            initializePicturePopup();
-            mActivePopup = mPicturePopup; 
-        }
-
         // if the 2nd level popup gets dismissed
         if (mSecondPopup != null) {
             mSecondPopup = null;

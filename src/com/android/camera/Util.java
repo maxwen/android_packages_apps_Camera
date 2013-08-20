@@ -97,7 +97,13 @@ public class Util {
     private static final String SCENE_MODE_HDR1 = "hdr";
     public static final String TRUE = "true";
     public static final String FALSE = "false";
-
+    private static final String VIDEO_HFR_VALUES = "video-hfr-values";
+    public static final String OFF = "off";
+    private static final String VIDEO_HDR_VALUES = "video-hdr-values";
+    public static final String VIDEO_HDR = "video-hdr";
+    public static final String VIDEO_HFR = "video-hfr";
+    public static final String VIDEO_HFR_SIZE = "720x480";
+                        
     public static boolean isSupported(String value, List<String> supported) {
         return supported == null ? false : supported.indexOf(value) >= 0;
     }
@@ -152,6 +158,16 @@ public class Util {
         return false;
     }
 
+    public static boolean isVideoHfrSupported(Parameters params) {
+        String value = params.get(VIDEO_HFR_VALUES);
+        return value != null && !value.equals(OFF);
+    }
+
+    public static boolean isVideoHdrSupported(Parameters params) {
+        String value = params.get(VIDEO_HDR_VALUES);
+        return value != null;
+    }
+
     // Private intent extras. Test only.
     private static final String EXTRAS_CAMERA_FACING =
             "android.intent.extras.CAMERA_FACING";
@@ -190,11 +206,10 @@ public class Util {
     private static boolean mIsMuted = false;
     private static boolean mNeedsManualTorch = false;
     private static String mTorchDevice;
-    private static boolean mVideoHdrSupported = false;
     
     private Util() {
     }
-
+    
     public static void initialize(Context context) {
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager wm = (WindowManager)
@@ -239,8 +254,6 @@ public class Util {
         
         mNeedsManualTorch = context.getResources().getBoolean(R.bool.needsManualTorch);
         mTorchDevice = context.getResources().getString(R.string.torchDevice);
-
-        mVideoHdrSupported = context.getResources().getBoolean(R.bool.hasVideoHdr);
     }
 
     public static int dpToPixel(int dp) {
@@ -1069,8 +1082,36 @@ public class Util {
             }
         }
     };
-
-    public static boolean isVideoHdrSupported(Parameters params) {
-	    return mVideoHdrSupported;
+	
+	public static void setVideoHfrMode(Activity activity, Parameters params, String value){
+	    if (isVideoHfrSupported(params)){
+	        if (!value.equals(activity.getString(R.string.setting_off_value))){
+	            params.set(VIDEO_HFR, value);
+	        } else {
+	            params.set(VIDEO_HFR, activity.getString(R.string.setting_off_value));
+	        }
+	    }
 	}
+
+    public static boolean isVideoHDROn(Activity activity, Parameters params) {
+        if (!isVideoHdrSupported(params)){
+            return false;
+        }
+        String videoHdr = params.get(VIDEO_HDR);
+        if (videoHdr != null && videoHdr.equals(activity.getString(R.string.setting_on_value))) {
+            return true;
+        }
+        return false;
+    }	
+
+    public static boolean isVideoHfrOn(Activity activity, Parameters params) {
+        if (!isVideoHfrSupported(params)){
+            return false;
+        }
+        String videoHfr = params.get(VIDEO_HFR);
+        if (videoHfr != null && !videoHfr.equals(activity.getString(R.string.setting_off_value))) {
+            return true;
+        }
+        return false;
+    }
 }

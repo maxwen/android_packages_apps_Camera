@@ -41,9 +41,9 @@ public class PieController {
     protected PreferenceGroup mPreferenceGroup;
     protected OnPreferenceChangedListener mListener;
     protected PieRenderer mRenderer;
-    private List<IconListPreference> mPreferences;
-    private Map<IconListPreference, PieItem> mPreferenceMap;
-    private Map<IconListPreference, String> mOverrides;
+    private List<ListPreference> mPreferences;
+    private Map<ListPreference, PieItem> mPreferenceMap;
+    private Map<ListPreference, String> mOverrides;
 
     public void setListener(OnPreferenceChangedListener listener) {
         mListener = listener;
@@ -52,9 +52,9 @@ public class PieController {
     public PieController(CameraActivity activity, PieRenderer pie) {
         mActivity = activity;
         mRenderer = pie;
-        mPreferences = new ArrayList<IconListPreference>();
-        mPreferenceMap = new HashMap<IconListPreference, PieItem>();
-        mOverrides = new HashMap<IconListPreference, String>();
+        mPreferences = new ArrayList<ListPreference>();
+        mPreferenceMap = new HashMap<ListPreference, PieItem>();
+        mOverrides = new HashMap<ListPreference, String>();
     }
 
     public void initialize(PreferenceGroup group) {
@@ -84,43 +84,57 @@ public class PieController {
         return new PieItem(drawable, 0);
     }
 
-    public void addItem(String prefKey, float center, float sweep) {
-        final IconListPreference pref =
-                (IconListPreference) mPreferenceGroup.findPreference(prefKey);
+    public void addPrefItem(PieItem item, String prefKey) {
+        final ListPreference pref =
+                (ListPreference) mPreferenceGroup.findPreference(prefKey);
         if (pref == null) return;
-        int[] iconIds = pref.getLargeIconIds();
+        mPreferences.add(pref);
+        mPreferenceMap.put(pref, item);
+    }
+    
+    public void addItem(String prefKey, float center, float sweep) {
+        final ListPreference pref =
+                (ListPreference) mPreferenceGroup.findPreference(prefKey);
+        if (pref == null) return;
+        
+        if (!(pref instanceof IconListPreference)){
+            return;
+        }      
+        final IconListPreference iconPref = (IconListPreference)pref;
+        
+        int[] iconIds = iconPref.getLargeIconIds();
         int resid = -1;
-        if (!pref.getUseSingleIcon() && iconIds != null) {
+        if (!iconPref.getUseSingleIcon() && iconIds != null) {
             // Each entry has a corresponding icon.
-            int index = pref.findIndexOfValue(pref.getValue());
+            int index = iconPref.findIndexOfValue(iconPref.getValue());
             resid = iconIds[index];
         } else {
             // The preference only has a single icon to represent it.
-            resid = pref.getSingleIcon();
+            resid = iconPref.getSingleIcon();
         }
         PieItem item = makeItem(resid);
         // use center and sweep to determine layout
         item.setFixedSlice(center, sweep);
         mRenderer.addItem(item);
-        mPreferences.add(pref);
-        mPreferenceMap.put(pref, item);
-        int nOfEntries = pref.getEntries().length;
+        mPreferences.add(iconPref);
+        mPreferenceMap.put(iconPref, item);
+        int nOfEntries = iconPref.getEntries().length;
         if (nOfEntries > 1) {
             for (int i = 0; i < nOfEntries; i++) {
                 PieItem inner = null;
                 if (iconIds != null) {
                     inner = makeItem(iconIds[i]);
                 } else {
-                    inner = makeItem(pref.getEntries()[i]);
+                    inner = makeItem(iconPref.getEntries()[i]);
                 }
                 item.addItem(inner);
                 final int index = i;
                 inner.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(PieItem item) {
-                        pref.setValueIndex(index);
-                        reloadPreference(pref);
-                        onSettingChanged(pref);
+                        iconPref.setValueIndex(index);
+                        reloadPreference(iconPref);
+                        onSettingChanged(iconPref);
                     }
                 });
             }
@@ -133,34 +147,39 @@ public class PieController {
 
     public void reloadPreferences() {
         mPreferenceGroup.reloadValue();
-        for (IconListPreference pref : mPreferenceMap.keySet()) {
+        for (ListPreference pref : mPreferenceMap.keySet()) {
             reloadPreference(pref);
         }
     }
 
-    private void reloadPreference(IconListPreference pref) {
-        if (pref.getUseSingleIcon()) return;
-        PieItem item = mPreferenceMap.get(pref);
-        String overrideValue = mOverrides.get(pref);
-        int[] iconIds = pref.getLargeIconIds();
+    private void reloadPreference(ListPreference pref) {
+        if (!(pref instanceof IconListPreference)){
+            return;
+        }      
+        IconListPreference iconPref = (IconListPreference)pref;
+
+        if (iconPref.getUseSingleIcon()) return;
+        PieItem item = mPreferenceMap.get(iconPref);
+        String overrideValue = mOverrides.get(iconPref);
+        int[] iconIds = iconPref.getLargeIconIds();
         if (iconIds != null) {
             // Each entry has a corresponding icon.
             int index;
             if (overrideValue == null) {
-                index = pref.findIndexOfValue(pref.getValue());
+                index = iconPref.findIndexOfValue(iconPref.getValue());
             } else {
-                index = pref.findIndexOfValue(overrideValue);
+                index = iconPref.findIndexOfValue(overrideValue);
                 if (index == -1) {
                     // Avoid the crash if camera driver has bugs.
                     Log.e(TAG, "Fail to find override value=" + overrideValue);
-                    pref.print();
+                    iconPref.print();
                     return;
                 }
             }
             item.setImageResource(mActivity, iconIds[index]);
         } else {
             // The preference only has a single icon to represent it.
-            item.setImageResource(mActivity, pref.getSingleIcon());
+            item.setImageResource(mActivity, iconPref.getSingleIcon());
         }
     }
 
@@ -169,12 +188,12 @@ public class PieController {
         if (keyvalues.length % 2 != 0) {
             throw new IllegalArgumentException();
         }
-        for (IconListPreference pref : mPreferenceMap.keySet()) {
+        for (ListPreference pref : mPreferenceMap.keySet()) {
             override(pref, keyvalues);
         }
     }
 
-    private void override(IconListPreference pref, final String ... keyvalues) {
+    private void override(ListPreference pref, final String ... keyvalues) {
         mOverrides.remove(pref);
         for (int i = 0; i < keyvalues.length; i += 2) {
             String key = keyvalues[i];
