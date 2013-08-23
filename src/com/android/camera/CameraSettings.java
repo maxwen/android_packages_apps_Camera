@@ -88,7 +88,8 @@ public class CameraSettings {
     public static final String KEY_VOICE_SHUTTER = "pref_voice_shutter_key";
     public static final String KEY_VIDEOCAMERA_HDR = "pref_video_hdr_key";
     public static final String KEY_VIDEOCAMERA_HFR = "pref_video_hfr_key";
-    
+    public static final String KEY_REDEYE = "pref_camera_redeye_key";
+        
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String SATURATION_DEFAULT_VALUE = "5";
     public static final String CONTRAST_DEFAULT_VALUE_HTC = "0";
@@ -217,7 +218,8 @@ public class CameraSettings {
         ListPreference voiceShutter = group.findPreference(KEY_VOICE_SHUTTER);
         ListPreference videoHdr = group.findPreference(KEY_VIDEOCAMERA_HDR);
         ListPreference videoHfr = group.findPreference(KEY_VIDEOCAMERA_HFR);
-                
+        ListPreference redeye = group.findPreference(KEY_REDEYE);
+                        
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
         if (videoQuality != null) {
@@ -346,6 +348,9 @@ public class CameraSettings {
 		}
         if (videoHfr != null && !Util.isVideoHfrSupported(mParameters)) {
             removePreference(group, videoHfr.getKey());
+		}
+		if (redeye != null && !Util.hasRedeyeFlashSupport(mParameters)) {
+            removePreference(group, redeye.getKey());
 		}
     }
 

@@ -259,6 +259,13 @@
 	<string name="video_hfr_setting_60">60</string>
 	<string name="video_hfr_setting_90">90</string>
 	<string name="video_hfr_setting_120">120</string> 
+	      	
+    <string name="setting_disabled_value" translatable="false">disable</string>
+    <string name="setting_enabled_value" translatable="false">enable</string>
+        
+    <!-- Default redeye entry value -->
+	<string name="pref_camera_redeye_default" translatable="false">@string/setting_disabled_value</string>
+	<string name="pref_camera_redeye">Red-eye reduction</string>
 	      			
     <!-- Dialog "OK" button. Dismisses dialog. -->
     <string name="dialog_ok">OK</string>

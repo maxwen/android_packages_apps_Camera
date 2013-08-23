@@ -469,7 +469,17 @@
         <item>@string/video_hfr_setting_60</item>
         <item>@string/video_hfr_setting_90</item>
     </string-array>
-    
+
+    <string-array name="pref_camera_redeye_entries" translatable="false">
+        <item>@string/setting_off</item>
+        <item>@string/setting_on</item>
+    </string-array>
+
+    <string-array name="pref_camera_redeye_entryvalues" translatable="false">
+        <item>@string/setting_disabled_value</item>
+        <item>@string/setting_enabled_value</item>
+    </string-array>
+        
     <!-- Default focus mode setting.-->
     <string-array name="pref_camera_focusmode_default_array" translatable="false">
         <item>continuous-picture</item>

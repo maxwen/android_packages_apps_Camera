@@ -103,6 +103,7 @@ public class Util {
     public static final String VIDEO_HDR = "video-hdr";
     public static final String VIDEO_HFR = "video-hfr";
     public static final String VIDEO_HFR_SIZE = "720x480";
+    private static final String REDEYE_VALUES = "redeye-reduction-values";
                         
     public static boolean isSupported(String value, List<String> supported) {
         return supported == null ? false : supported.indexOf(value) >= 0;
@@ -168,6 +169,11 @@ public class Util {
         return value != null;
     }
 
+    public static boolean hasRedeyeFlashSupport(Parameters params) {
+        String value = params.get(REDEYE_VALUES);
+        return value != null;
+    }
+
     // Private intent extras. Test only.
     private static final String EXTRAS_CAMERA_FACING =
             "android.intent.extras.CAMERA_FACING";
@@ -182,6 +188,7 @@ public class Util {
     private static boolean sHTCCamMode;
     private static boolean sNoFaceDetect;
     private static boolean sHTCPictureOptions;
+    
     private static boolean sExtendedPictureOptions;
     private static int sManualZoomStep;
 

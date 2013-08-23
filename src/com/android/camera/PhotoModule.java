@@ -2550,6 +2550,13 @@ public class PhotoModule
             }
         }
 
+		if (Util.hasRedeyeFlashSupport(mParameters)){
+			String redeyeValue = mPreferences.getString(
+                CameraSettings.KEY_REDEYE,
+                mActivity.getString(R.string.pref_camera_redeye_default));
+			mParameters.set("redeye-reduction", redeyeValue);
+		}
+		
         if (Parameters.SCENE_MODE_AUTO.equals(mSceneMode)) {
             // Set white balance parameter.
             String whiteBalance = mPreferences.getString(

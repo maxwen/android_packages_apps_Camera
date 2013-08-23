@@ -145,4 +145,11 @@
             camera:defaultValue="@string/pref_camera_voiceshutter_default"
             camera:title="@string/pref_camera_voiceshutter_title"
             camera:entries="@array/pref_camera_voiceshutter_entries" />
+    <ListPreference
+            camera:key="pref_camera_redeye_key"
+            camera:defaultValue="@string/pref_camera_redeye_default"
+            camera:title="@string/pref_camera_redeye"
+            camera:entries="@array/pref_camera_redeye_entries"
+            camera:entryValues="@array/pref_camera_redeye_entryvalues" />
+
 </PreferenceGroup>
