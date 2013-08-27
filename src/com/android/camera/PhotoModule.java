@@ -99,7 +99,6 @@ public class PhotoModule
 
     private static final String TAG = "CAM_PhotoModule";
 
-    private boolean mRestartPreview = false;
     private boolean mAspectRatioChanged = false;
 
     // We number the request code from 1000 to avoid collision with Gallery.
@@ -1004,7 +1003,7 @@ public class PhotoModule
                 mPictureDisplayedToJpegCallbackTime =
                         mJpegPictureCallbackTime - mRawPictureCallbackTime;
             }
-            Log.v(TAG, "mPictureDisplayedToJpegCallbackTime = "
+            Log.v(TAG, "mIsImageCaptureIntent="+mIsImageCaptureIntent + " mPictureDisplayedToJpegCallbackTime = "
                     + mPictureDisplayedToJpegCallbackTime + "ms");
 
             // Only animate when in full screen capture mode
@@ -1051,6 +1050,9 @@ public class PhotoModule
             } else {
                 mJpegImageData = jpegData;
                 if (!mQuickCapture) {
+                	// maxwen: required for capture intent to 
+                	// show preview after picture taken
+                	stopPreview();
                     showPostCaptureAlert();
                 } else {
                     doAttach();
@@ -1069,7 +1071,7 @@ public class PhotoModule
                     + mJpegCallbackFinishTime + "ms");
             mJpegPictureCallbackTime = 0;
 
-            if (mSnapshotOnIdle && mBurstShotsDone > 0) {
+            if (!mIsImageCaptureIntent && mSnapshotOnIdle && mBurstShotsDone > 0) {
                 mHandler.post(mDoSnapRunnable);
             }
         }
@@ -1378,10 +1380,6 @@ public class PhotoModule
         mCameraDevice.takePicture2(mShutterCallback, mRawPictureCallback,
                 mPostViewPictureCallback, new JpegPictureCallback(loc),
                 mCameraState, mFocusManager.getFocusState());
-
-        if (Util.enableZSL()) {
-            mRestartPreview = false;
-        }
 
         if (!animateBefore) {
             animateFlash();
@@ -2658,11 +2656,6 @@ public class PhotoModule
             mUpdateSet = 0;
             return;
         } else if (isCameraIdle()) {
-            if (mRestartPreview) {
-                Log.d(TAG, "Restarting preview");
-                startPreview();
-                mRestartPreview = false;
-            }
             setCameraParameters(mUpdateSet);
             updateSceneModeUI();
             mUpdateSet = 0;
